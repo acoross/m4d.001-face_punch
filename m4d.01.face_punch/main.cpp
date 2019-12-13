@@ -1,31 +1,27 @@
 #include <SFML/Graphics.hpp>
-#include <windows.h>
-
-std::string getPath() {
-	char buffer[MAX_PATH];
-	GetModuleFileName(NULL, buffer, MAX_PATH);
-	std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-	return std::string(buffer).substr(0, pos);
-}
 
 int main(int argc, char** argv[])
 {
-	const auto path = getPath();
-
-	sf::Texture texture;
-	if (!texture.loadFromFile(path + "\\sample.png"))
-	{
-		// Handle an error.
-	}
-
 	sf::RenderWindow window(sf::VideoMode(640, 480),
 		"Rendering the rectangle.");
-	// Creating our shape.
-	sf::RectangleShape rectangle(sf::Vector2f(128.0f, 128.0f));
-	rectangle.setFillColor(sf::Color::Red);
-	rectangle.setPosition(320, 240);
-	rectangle.setOrigin(rectangle.getSize().x / 2,
-		rectangle.getSize().y / 2);
+
+	sf::Texture texture;
+	if (!texture.loadFromFile(".\\knight.png"))
+	{
+		// Handle an error.
+		window.close();
+	}
+	
+	const float scale = 0.08f;
+	const auto sizeU = texture.getSize();
+	const sf::Vector2f size(sizeU.x * scale, sizeU.y * scale);
+
+	sf::Sprite knight(texture);
+	knight.setScale(scale, scale);
+	knight.setOrigin(size);
+
+	sf::Vector2f increment(0.4f, 0.4f);
+	
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -34,8 +30,26 @@ int main(int argc, char** argv[])
 				window.close();
 			}
 		}
+
+		const auto position = knight.getPosition();
+		const auto windowSize = window.getSize();
+		
+		if ((position.x + size.x / 2 > windowSize.x && increment.x > 0) || 
+			(position.x - size.x / 2 < 0 && increment.x < 0))
+		{
+			increment.x = -increment.x;
+		}
+
+		if ((position.y + size.y / 2 > windowSize.y && increment.y > 0) ||
+			(position.y - size.y / 2 < 0 && increment.y < 0))
+		{
+			increment.y = -increment.y;
+		}
+
+		knight.setPosition(position + increment);
+
 		window.clear(sf::Color::Black);
-		window.draw(rectangle); // Drawing our shape.
+		window.draw(knight);
 		window.display();
 	}
 
