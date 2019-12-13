@@ -1,22 +1,41 @@
 #include <SFML/Graphics.hpp>
+#include <windows.h>
 
-int main()
+std::string getPath() {
+	char buffer[MAX_PATH];
+	GetModuleFileName(NULL, buffer, MAX_PATH);
+	std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+	return std::string(buffer).substr(0, pos);
+}
+
+int main(int argc, char** argv[])
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	const auto path = getPath();
 
-	while (window.isOpen())
+	sf::Texture texture;
+	if (!texture.loadFromFile(path + "\\sample.png"))
 	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+		// Handle an error.
+	}
 
-		window.clear();
-		window.draw(shape);
+	sf::RenderWindow window(sf::VideoMode(640, 480),
+		"Rendering the rectangle.");
+	// Creating our shape.
+	sf::RectangleShape rectangle(sf::Vector2f(128.0f, 128.0f));
+	rectangle.setFillColor(sf::Color::Red);
+	rectangle.setPosition(320, 240);
+	rectangle.setOrigin(rectangle.getSize().x / 2,
+		rectangle.getSize().y / 2);
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				// Close window button clicked.
+				window.close();
+			}
+		}
+		window.clear(sf::Color::Black);
+		window.draw(rectangle); // Drawing our shape.
 		window.display();
 	}
 
