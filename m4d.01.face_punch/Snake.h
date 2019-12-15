@@ -40,6 +40,7 @@ public:
 	void Cut(int l_segments); // Method for cutting snake.
 	sf::Vector2i GetPosition() const;
 	void IncreaseScore();
+	Direction GetPhysicalDirection();
 
 	void CheckCollision(); // Checking for collisions.
 

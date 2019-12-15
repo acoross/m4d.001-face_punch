@@ -52,12 +52,14 @@ void World::RespawnApple()
 		m_item.y * m_blockSize);
 }
 
-void World::Update(Snake& l_player)
+void World::Update(Snake& l_player, Textbox& l_textbox)
 {
 	if (l_player.GetPosition() == m_item) 
 	{
 		l_player.Extend();
 		l_player.IncreaseScore();
+
+		l_textbox.Add("You ate an apple. Score: " + std::to_string(l_player.m_score));
 
 		RespawnApple();
 	}
