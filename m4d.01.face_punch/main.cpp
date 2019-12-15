@@ -1,10 +1,12 @@
+#include <iostream>
 #include "Game.h"
 
-void main(int argc, void** argv[]) {
+void main(int argc, void** argv[]) 
+{
 	// Program entry point.
 	Game game; // Creating our game object.
-	while (!game.GetWindow()->IsDone()) {
-		// Game loop.
+	while (!game.GetWindow()->IsDone()) 
+	{
 		game.HandleInput();
 		game.Update();
 		game.Render();

@@ -5,8 +5,7 @@ Window::Window()
 	Setup("Window", sf::Vector2u(640, 480)); 
 }
 
-Window::Window(const std::string& title,
-	const sf::Vector2u& size)
+Window::Window(const std::string& title, const sf::Vector2u& size)
 {
 	Setup(title, size);
 }
@@ -92,4 +91,9 @@ sf::Vector2u Window::GetWindowSize()
 void Window::Draw(sf::Drawable& drawable) 
 {
 	window_.draw(drawable);
+}
+
+sf::RenderWindow* Window::GetRenderWindow()
+{
+	return &window_;
 }
