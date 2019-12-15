@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game() 
 	: m_window("Chapter 2", sf::Vector2u(800, 600)) 
@@ -11,6 +12,15 @@ Game::Game()
 	m_textbox.Setup(5, 14, 350, sf::Vector2f(225, 10));
 
 	m_textbox.Add("Seeded random number generator with: " + std::to_string(time(NULL)));
+
+	texture_.loadFromFile("knight.png");
+	const auto textureSize = texture_.getSize();
+
+	sprite_.setTexture(texture_);
+	sprite_.setScale(0.1f, 0.1f);
+	sprite_.setOrigin(textureSize.x / 2.f, textureSize.y / 2.f);
+
+	m_window.GetEventManager()->AddCallback("Move", &Game::MoveSprite, this);
 }
 
 Game::~Game() { }
@@ -73,5 +83,19 @@ void Game::Render() {
 	m_snake.Render(*m_window.GetRenderWindow());
 	m_textbox.Render(*m_window.GetRenderWindow());
 
+	m_window.Draw(sprite_);
+
 	m_window.EndDraw(); // Display.
+}
+
+void Game::MoveSprite(EventDetails* l_details)
+{
+	sf::Vector2i mousepos =
+		m_window.GetEventManager()->GetMousePos(
+			m_window.GetRenderWindow());
+
+	sprite_.setPosition(mousepos.x, mousepos.y);
+	std::cout << "Moving sprite to: "
+		<< mousepos.x << ":"
+		<< mousepos.y << std::endl;
 }

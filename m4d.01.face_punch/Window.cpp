@@ -61,15 +61,6 @@ void Window::Update()
 		}
 
 		m_eventManager.HandleEvent(event);
-		/*if (event.type == sf::Event::Closed) 
-		{
-			isDone_ = true;
-		}
-		else if (event.type == sf::Event::KeyPressed &&
-			event.key.code == sf::Keyboard::F5)
-		{
-			ToggleFullscreen();
-		}*/
 	}
 
 	m_eventManager.Update();

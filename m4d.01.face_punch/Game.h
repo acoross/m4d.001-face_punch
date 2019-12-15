@@ -15,6 +15,7 @@ public:
 
 	Window* GetWindow();
 	void RestartClock();
+	void MoveSprite(EventDetails* l_details);
 
 private:
 	Window m_window;
@@ -25,4 +26,7 @@ private:
 	World m_world;
 	Snake m_snake;
 	Textbox m_textbox;
+
+	sf::Texture texture_;
+	sf::Sprite sprite_;
 };
