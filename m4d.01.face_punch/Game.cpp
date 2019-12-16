@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game() 
-	: m_window("Chapter 2", sf::Vector2u(800, 600)) 
+	: m_window("m4d.01.face_punch", sf::Vector2u(800, 600)) 
 	, m_world(sf::Vector2u(800, 600))
 	, m_snake(m_world.GetBlockSize())
 {
