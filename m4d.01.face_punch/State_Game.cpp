@@ -23,6 +23,9 @@ void State_Game::OnCreate()
 	eventMgr->AddCallback(StateType::Game, "Key_Right", &State_Game::MoveRight, this);
 	eventMgr->AddCallback(StateType::Game, "Key_Up", &State_Game::MoveUp, this);
 	eventMgr->AddCallback(StateType::Game, "Key_Down", &State_Game::MoveDown, this);
+
+	eventMgr->AddCallback(StateType::Game, "Key_Escape", &State_Game::MainMenu, this);
+	eventMgr->AddCallback(StateType::Game, "Key_P", &State_Game::Pause, this);
 }
 
 void State_Game::OnDestroy()
@@ -32,6 +35,9 @@ void State_Game::OnDestroy()
 	eventMgr->RemoveCallback(StateType::Game, "Key_Right");
 	eventMgr->RemoveCallback(StateType::Game, "Key_Up");
 	eventMgr->RemoveCallback(StateType::Game, "Key_Down");
+
+	eventMgr->RemoveCallback(StateType::Game, "Key_Escape");
+	eventMgr->RemoveCallback(StateType::Game, "Key_P");
 }
 
 void State_Game::Activate()
@@ -100,4 +106,14 @@ void State_Game::MoveDown(EventDetails* l_details)
 	{
 		m_snake.m_dir = Direction::Down;
 	}
+}
+
+void State_Game::MainMenu(EventDetails* l_details)
+{
+	stateMgr_->SwitchTo(StateType::MainMenu);
+}
+
+void State_Game::Pause(EventDetails* l_details)
+{
+	stateMgr_->SwitchTo(StateType::Paused);
 }

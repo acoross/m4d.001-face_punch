@@ -26,6 +26,9 @@ public:
 	void MoveRight(EventDetails* l_details);
 	void MoveUp(EventDetails* l_details);
 	void MoveDown(EventDetails* l_details);
+	
+	void MainMenu(EventDetails* l_details);
+	void Pause(EventDetails* l_details);
 
 private:
 	float m_elapsedSeconds = 0;

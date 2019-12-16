@@ -64,8 +64,12 @@ void State_MainMenu::OnDestroy()
 void State_MainMenu::Activate() 
 {
 	if (stateMgr_->HasState(StateType::Game)
-		&& m_labels[0].getString() == "Play")
+		&& m_labels[0].getString() == "PLAY")
 	{
+		m_labels[0].setString(sf::String("RESUME"));
+		sf::FloatRect rect = m_labels[0].getLocalBounds();
+		m_labels[0].setOrigin(rect.left + rect.width / 2.0f,
+			rect.top + rect.height / 2.0f);
 	}
 }
 
