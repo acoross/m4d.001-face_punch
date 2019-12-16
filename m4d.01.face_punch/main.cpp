@@ -16,10 +16,9 @@ void main(int argc, void** argv[])
 	Game game; // Creating our game object.
 	while (!game.GetWindow()->IsDone()) 
 	{
-		game.HandleInput();
 		game.Update();
 		game.Render();
-		game.RestartClock();
+		game.LateUpdate();
 	}
 
 	music.stop();

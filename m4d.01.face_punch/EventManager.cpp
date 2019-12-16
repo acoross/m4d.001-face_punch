@@ -4,7 +4,7 @@
 #include <sstream>
 
 EventManager::EventManager() 
-	: m_hasFocus(true) 
+	: m_hasFocus(true), currentState_(StateType(0))
 { 
 	LoadBindings(); 
 }
@@ -39,6 +39,11 @@ bool EventManager::RemoveBinding(std::string l_name)
 	delete itr->second;
 	m_bindings.erase(itr);
 	return true;
+}
+
+void EventManager::SetCurrentState(StateType type)
+{
+	currentState_ = type;
 }
 
 void EventManager::SetFocus(const bool& l_focus)
@@ -166,9 +171,23 @@ void EventManager::Update()
 
 		if (bind->m_events.size() == bind->c) 
 		{
-			auto callItr = m_callbacks.find(bind->m_name);
-			if (callItr != m_callbacks.end()) {
-				callItr->second(&bind->m_details);
+			auto stateCallbacks = m_callbacks.find(currentState_);
+			auto globalCallbacks = m_callbacks.find(StateType(0));
+
+			if (stateCallbacks != m_callbacks.end())
+			{
+				auto callItr = stateCallbacks->second.find(bind->m_name);
+				if (callItr != stateCallbacks->second.end()) {
+					callItr->second(&bind->m_details);
+				}
+			}
+
+			if (globalCallbacks != m_callbacks.end())
+			{
+				auto callItr = globalCallbacks->second.find(bind->m_name);
+				if (callItr != globalCallbacks->second.end()) {
+					callItr->second(&bind->m_details);
+				}
 			}
 		}
 

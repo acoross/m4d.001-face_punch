@@ -3,30 +3,26 @@
 #include "Snake.h"
 #include "World.h"
 #include "TextBox.h"
+#include "StateManager.h"
 
 class Game {
 public:
 	Game();
 	~Game();
 
-	void HandleInput();
 	void Update();
 	void Render();
+	void LateUpdate();
 
 	Window* GetWindow();
-	void RestartClock();
-	void MoveSprite(EventDetails* l_details);
 
 private:
+	void RestartClock();
+
 	Window m_window;
 	sf::Clock m_clock;
 	sf::Time m_elapsed;
-	float m_elapsedSeconds = 0;
-
-	World m_world;
-	Snake m_snake;
-	Textbox m_textbox;
-
-	sf::Texture texture_;
-	sf::Sprite sprite_;
+	
+	SharedContext m_context;
+	StateManager m_stateManager;
 };
