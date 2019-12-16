@@ -48,6 +48,9 @@
     <ClCompile Include="State_Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="State_Paused.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="State_Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Paused.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -87,6 +87,7 @@
     <ClCompile Include="State_Game.cpp" />
     <ClCompile Include="State_Intro.cpp" />
     <ClCompile Include="State_MainMenu.cpp" />
+    <ClCompile Include="State_Paused.cpp" />
     <ClCompile Include="TextBox.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="World.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="State_Game.h" />
     <ClInclude Include="State_Intro.h" />
     <ClInclude Include="State_MainMenu.h" />
+    <ClInclude Include="State_Paused.h" />
     <ClInclude Include="TextBox.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="World.h" />

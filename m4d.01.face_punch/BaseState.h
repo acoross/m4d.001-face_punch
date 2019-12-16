@@ -25,7 +25,7 @@ public:
 	void SetTransparent(const bool& transparent) { transparent_ = transparent; }
 	bool IsTransparent() const { return transparent_; }
 
-	void SetTransparent(bool transcendence) { transcendent_ = transcendence; }
+	void SetTranscendent(bool transcendence) { transcendent_ = transcendence; }
 	bool IsTranscendent() const { return transcendent_; }
 
 	class StateManager* GetStateManager() { return stateMgr_; }

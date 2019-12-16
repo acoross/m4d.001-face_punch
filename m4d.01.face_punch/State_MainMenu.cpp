@@ -29,7 +29,7 @@ void State_MainMenu::OnCreate()
 	m_buttonPadding = 4;
 
 	std::string str[3];
-	str[0] = "Play";
+	str[0] = "PLAY";
 	str[1] = "CREDITS";
 	str[2] = "EXIT";
 
