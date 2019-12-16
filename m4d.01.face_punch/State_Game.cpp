@@ -27,6 +27,11 @@ void State_Game::OnCreate()
 
 void State_Game::OnDestroy()
 {
+	EventManager* eventMgr = stateMgr_->GetContext()->m_eventManager;
+	eventMgr->RemoveCallback(StateType::Game, "Key_Left");
+	eventMgr->RemoveCallback(StateType::Game, "Key_Right");
+	eventMgr->RemoveCallback(StateType::Game, "Key_Up");
+	eventMgr->RemoveCallback(StateType::Game, "Key_Down");
 }
 
 void State_Game::Activate()
