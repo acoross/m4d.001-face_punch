@@ -4,6 +4,7 @@
 #include "World.h"
 #include "TextBox.h"
 #include "StateManager.h"
+#include "TextureManager.h"
 
 class Game {
 public:
@@ -25,4 +26,5 @@ private:
 	
 	SharedContext m_context;
 	StateManager m_stateManager;
+	TextureManager m_textureManager;
 };

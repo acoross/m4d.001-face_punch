@@ -13,7 +13,8 @@ namespace Utils
 
 	inline std::string GetWorkingDirectory()
 	{
-		HMODULE hModule = GetModuleHandle(nullptr);
+		return "";
+		/*HMODULE hModule = GetModuleHandle(nullptr);
 		if (hModule)
 		{
 			char path[256];
@@ -24,7 +25,7 @@ namespace Utils
 			return std::string(path);
 		}
 
-		return "";
+		return "";*/
 	}
 #elif defined RUNNING_LINUX
 #include <unistd.h>
