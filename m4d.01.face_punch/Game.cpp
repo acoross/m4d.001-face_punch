@@ -8,20 +8,10 @@ Game::Game()
 	m_clock.restart();
 	srand(time(NULL));
 
-	/*
-	texture_.loadFromFile("knight.png");
-	const auto textureSize = texture_.getSize();
-
-	sprite_.setTexture(texture_);
-	sprite_.setScale(0.1f, 0.1f);
-	sprite_.setOrigin(textureSize.x / 2.f, textureSize.y / 2.f);
-
-	m_window.GetEventManager()->AddCallback("Move", &Game::MoveSprite, this);*/
-
 	m_context.m_wind = &m_window;
 	m_context.m_eventManager = m_window.GetEventManager();
 	
-	m_stateManager.SwitchTo(StateType::Intro);
+	m_stateManager.SwitchTo(StateType::MainMenu);
 }
 
 Game::~Game() { }

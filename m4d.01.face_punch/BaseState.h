@@ -30,8 +30,12 @@ public:
 
 	class StateManager* GetStateManager() { return stateMgr_; }
 
+	sf::View& GetView() { return view_; }
+
 protected:
 	class StateManager* stateMgr_;
 	bool transparent_;
 	bool transcendent_;
+
+	sf::View view_;
 };

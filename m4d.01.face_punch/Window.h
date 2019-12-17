@@ -23,6 +23,8 @@ public:
 	EventManager* GetEventManager();
 	void ToggleFullscreen(EventDetails* l_details);
 	void Close(EventDetails* l_details = nullptr);
+	
+	sf::FloatRect GetViewSpace();
 
 private:
 	void Setup(const std::string& title, const sf::Vector2u& size);

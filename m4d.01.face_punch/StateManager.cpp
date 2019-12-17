@@ -7,7 +7,7 @@
 StateManager::StateManager(SharedContext* shared)
 	: shared_(shared)
 {
-	RegisterState<class State_Intro>(StateType::Intro);
+	RegisterState<State_Intro>(StateType::Intro);
 	RegisterState<State_MainMenu>(StateType::MainMenu);
 	RegisterState<State_Game>(StateType::Game);
 	RegisterState<State_Paused>(StateType::Paused);
@@ -130,6 +130,8 @@ void StateManager::SwitchTo(const StateType& type)
 			states_.erase(itr);
 			states_.emplace_back(tmp_type, tmp_state);
 			tmp_state->Activate();
+			shared_->m_wind->GetRenderWindow()->setView(tmp_state->GetView());
+
 			return;
 		}
 	}
@@ -141,6 +143,7 @@ void StateManager::SwitchTo(const StateType& type)
 
 	CreateState(type);
 	states_.back().second->Activate();
+	shared_->m_wind->GetRenderWindow()->setView(states_.back().second->GetView());
 }
 
 void StateManager::Remove(const StateType& type)
@@ -166,6 +169,7 @@ void StateManager::CreateState(const StateType& type)
 	}
 
 	BaseState* state = newState->second();
+	state->view_ = shared_->m_wind->GetRenderWindow()->getDefaultView();
 	states_.emplace_back(type, state);
 	state->OnCreate();
 }
