@@ -2,44 +2,35 @@
 #include "System_Manager.h"
 #include "Map.h"
 
-S_Collision::S_Collision(SystemManager* l_systemMgr) 
-	: S_Base(System::Collision,l_systemMgr)
+S_Collision::S_Collision(SharedContext* sharedContext)
+	: m_gameMap(nullptr), m_sharedContext(sharedContext)
 {
-	Bitmask req;
-	req.TurnOnBit((unsigned int)Component::Position);
-	req.TurnOnBit((unsigned int)Component::Collidable);
-	m_requiredComponents.push_back(req);
-	req.Clear();
-
-	m_gameMap = nullptr;
 }
 
 S_Collision::~S_Collision(){}
 
 void S_Collision::SetMap(Map* l_map){ m_gameMap = l_map; }
 
-void S_Collision::Update(float l_dT){
-	if (!m_gameMap){ return; }
-	EntityManager* entities = m_systemManager->GetEntityManager();
-	for(auto &entity : m_entities){
-		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
-		C_Collidable* collidable = entities->GetComponent<C_Collidable>(entity, Component::Collidable);
-		
-		collidable->SetPosition(position->GetPosition());
-		collidable->ResetCollisionFlags();
-		CheckOutOfBounds(position, collidable);
-		MapCollisions(entity, position, collidable);
-	}
-	EntityCollisions();
+void S_Collision::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt)
+{
+	entities.each<C_Position, C_Collidable>([this](auto entity, auto& position, auto& collidable)
+		{
+			collidable.SetPosition(position.GetPosition());
+			collidable.ResetCollisionFlags();
+			CheckOutOfBounds(&position, &collidable);
+			MapCollisions(entity, &position, &collidable);
+		});
+	EntityCollisions(entities);
 }
 
-void S_Collision::EntityCollisions(){
-	EntityManager* entities = m_systemManager->GetEntityManager();
-	for(auto itr = m_entities.begin(); itr != m_entities.end(); ++itr)
+void S_Collision::EntityCollisions(entityx::EntityManager& entities){
+	auto list1 = entities.entities_with_components<C_Collidable>();
+	auto list2 = entities.entities_with_components<C_Collidable>();
+	for(auto itr : list1)
 	{
-		for(auto itr2 = std::next(itr); itr2 != m_entities.end(); ++itr2){
-			C_Collidable* collidable1 = entities->GetComponent<C_Collidable>(*itr, Component::Collidable);
-			C_Collidable* collidable2 = entities->GetComponent<C_Collidable>(*itr2, Component::Collidable);
+		for(auto itr2 : list2){
+			auto collidable1 = itr.component<C_Collidable>();
+			auto collidable2 = itr2.component<C_Collidable>();
 			if(collidable1->GetCollidable().intersects(collidable2->GetCollidable()))
 			{
 				// Entity-on-entity collision!
@@ -68,7 +59,7 @@ void S_Collision::CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col){
 	}
 }
 
-void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_Collidable* l_col){
+void S_Collision::MapCollisions(entityx::Entity& l_entity, C_Position* l_pos, C_Collidable* l_col){
 	unsigned int TileSize = m_gameMap->GetTileSize();
 	Collisions c;
 
@@ -113,7 +104,7 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 			}
 			l_pos->MoveBy(resolve, 0);
 			l_col->SetPosition(l_pos->GetPosition());
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_X);
+			m_sharedContext->m_entityXEventManager->emit(EntityEventData{l_entity, EntityEvent::Colliding_X });
 			l_col->CollideOnX();
 		} else {
 			if (yDiff > 0){
@@ -123,11 +114,8 @@ void S_Collision::MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_C
 			}
 			l_pos->MoveBy(0, resolve);
 			l_col->SetPosition(l_pos->GetPosition());
-			m_systemManager->AddEvent(l_entity, (EventID)EntityEvent::Colliding_Y);
+			m_sharedContext->m_entityXEventManager->emit(EntityEventData{ l_entity, EntityEvent::Colliding_Y });
 			l_col->CollideOnY();
 		}
 	}
 }
-
-void S_Collision::HandleEvent(const EntityId& l_entity,const EntityEvent& l_event){}
-void S_Collision::Notify(const Message& l_message){}

@@ -1,4 +1,6 @@
 #pragma once
+#include "entityx/Entity.h"
+
 using MessageType = unsigned int;
 struct TwoFloats{ float m_x; float m_y; };
 
@@ -7,7 +9,7 @@ struct Message{
 
 	MessageType m_type;
 	int m_sender;
-	int m_receiver;
+	entityx::Entity m_receiver;
 
 	union{
 		TwoFloats m_2f;

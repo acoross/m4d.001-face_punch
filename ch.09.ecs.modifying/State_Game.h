@@ -2,6 +2,7 @@
 #include "BaseState.h"
 #include "Map.h"
 #include "EventManager.h"
+#include <entityx/entityx.h>
 
 class State_Game : public BaseState{
 public:
@@ -27,5 +28,5 @@ private:
 	void UpdateCamera();
 
 	Map* m_gameMap;
-	int m_player;
+	entityx::Entity m_player;
 };

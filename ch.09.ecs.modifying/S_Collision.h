@@ -1,5 +1,7 @@
 #pragma once
 #include "S_Base.h"
+#include <entityx/entityx.h>
+#include "SharedContext.h"
 
 struct TileInfo;
 class Map;
@@ -14,20 +16,20 @@ struct CollisionElement{
 
 using Collisions = std::vector<CollisionElement>;
 
-class S_Collision : public S_Base{
+class S_Collision : public entityx::System<S_Collision>{
 public:
-	S_Collision(SystemManager* l_systemMgr);
+	S_Collision(SharedContext* sharedContext);
 	~S_Collision();
 
 	void SetMap(Map* l_map);
 
-	void Update(float l_dT);
-	void HandleEvent(const EntityId& l_entity,const EntityEvent& l_event);
-	void Notify(const Message& l_message);
+	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
+
 private:
-	void EntityCollisions();
-	void MapCollisions(const EntityId& l_entity, C_Position* l_pos, C_Collidable* l_col);
+	void EntityCollisions(entityx::EntityManager& entities);
+	void MapCollisions(entityx::Entity& l_entity, C_Position* l_pos, C_Collidable* l_col);
 	void CheckOutOfBounds(C_Position* l_pos, C_Collidable* l_col);
 	
 	Map* m_gameMap;
+	SharedContext* m_sharedContext;
 };

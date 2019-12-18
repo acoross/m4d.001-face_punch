@@ -1,5 +1,8 @@
 #include "State_Game.h"
 #include "StateManager.h"
+#include "S_Collision.h"
+#include "S_Movement.h"
+#include "S_Renderer.h"
 
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager){}
@@ -26,10 +29,9 @@ void State_Game::OnCreate(){
 	m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
 	m_gameMap->LoadMap("media/Maps/map1.map");
 
-	EntityManager* entities = m_stateMgr->GetContext()->m_entityManager;
-	m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Collision>(System::Collision)->SetMap(m_gameMap);
-	m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Movement>(System::Movement)->SetMap(m_gameMap);
-	m_player = m_gameMap->GetPlayerId();
+	m_stateMgr->GetContext()->m_systemManager->system<S_Collision>()->SetMap(m_gameMap);
+	m_stateMgr->GetContext()->m_systemManager->system<S_Movement>()->SetMap(m_gameMap);
+	m_player = m_gameMap->GetPlayer();
 }
 
 void State_Game::OnDestroy(){
@@ -50,14 +52,13 @@ void State_Game::Update(const sf::Time& l_time){
 	SharedContext* context = m_stateMgr->GetContext();
 	UpdateCamera();
 	m_gameMap->Update(l_time.asSeconds());
-	context->m_systemManager->Update(l_time.asSeconds());
+	context->m_systemManager->update_all(l_time.asSeconds());
 }
 
 void State_Game::UpdateCamera(){
 	if (m_player == -1){ return; }
 	SharedContext* context = m_stateMgr->GetContext();
-	C_Position* pos = m_stateMgr->GetContext()->m_entityManager->
-		GetComponent<C_Position>(m_player, Component::Position);
+	auto pos = m_player.component<C_Position>();
 
 	m_view.setCenter(pos->GetPosition());
 	context->m_wind->GetRenderWindow()->setView(m_view);
@@ -83,8 +84,11 @@ void State_Game::UpdateCamera(){
 void State_Game::Draw(){
 	for(unsigned int i = 0; i < Sheet::Num_Layers; ++i){
 		m_gameMap->Draw(i);
-		m_stateMgr->GetContext()->m_systemManager->Draw(
-			m_stateMgr->GetContext()->m_wind, i);
+
+		if (auto renderer = m_stateMgr->GetContext()->m_systemManager->system<S_Renderer>())
+		{
+			renderer->Render(m_stateMgr->GetContext()->m_wind, i);
+		}
 	}
 }
 

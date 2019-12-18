@@ -1,14 +1,20 @@
 #pragma once
-#include "S_Base.h"
+#include <entityx/entityx.h>
+#include "SharedContext.h"
+#include "EntityEvents.h"
+#include "Directions.h"
 
-class S_Control : public S_Base{
+class S_Control : public entityx::System<S_Control>, public entityx::Receiver<S_Control>{
 public:
-	S_Control(SystemManager* l_systemMgr);
+	S_Control(SharedContext* sharedContext);
 	~S_Control();
 
-	void Update(float l_dT);
-	void HandleEvent(const EntityId& l_entity,const EntityEvent& l_event);
-	void Notify(const Message& l_message);
+	void configure(entityx::EventManager& eventManager) override;
+	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
+	void receive(const EntityEventData& event);
+
 private:
-	void MoveEntity(const EntityId& l_entity, const Direction& l_dir);
+	void MoveEntity(entityx::Entity& l_entity, const Direction& l_dir);
+
+	SharedContext* m_sharedContext;
 };

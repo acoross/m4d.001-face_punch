@@ -1,19 +1,29 @@
 #include "S_Renderer.h"
 #include "System_Manager.h"
 
-S_Renderer::S_Renderer(SystemManager* l_systemMgr)
-	:S_Base(System::Renderer, l_systemMgr)
+S_Renderer::S_Renderer(SharedContext* sharedContext)
+	: m_sharedContext(sharedContext)
 {
-	Bitmask req;
-	req.TurnOnBit((unsigned int)Component::Position);
-	req.TurnOnBit((unsigned int)Component::SpriteSheet);
-	m_requiredComponents.push_back(req);
-	req.Clear();
-
-	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Direction_Changed,this);
 }
 	
 S_Renderer::~S_Renderer(){}
+
+void S_Renderer::configure(entityx::EventManager& eventManager)
+{
+	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Direction_Changed, this);
+}
+
+void S_Renderer::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt)
+{
+}
+
+void S_Renderer::receive(const EntityEventData& event)
+{
+}
+
+void S_Renderer::receive(const Message& l_message)
+{
+}
 
 void S_Renderer::Update(float l_dT){
 	EntityManager* entities = m_systemManager->GetEntityManager();
