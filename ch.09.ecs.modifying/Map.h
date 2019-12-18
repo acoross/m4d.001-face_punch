@@ -63,7 +63,7 @@ public:
 	unsigned int GetTileSize()const;
 	const sf::Vector2u& GetMapSize()const;
 	const sf::Vector2f& GetPlayerStart()const;
-	int GetPlayerId()const;
+	entityx::Entity GetPlayer()const;
 
 	void LoadMap(const std::string& l_path);
 
@@ -85,7 +85,7 @@ private:
 
 	sf::Vector2u m_maxMapSize;
 	sf::Vector2f m_playerStart;
-	int m_playerId;
+	entityx::Entity m_player;
 	unsigned int m_tileCount;
 	unsigned int m_tileSetCount;
 	SharedContext* m_context;

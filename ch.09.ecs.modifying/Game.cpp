@@ -1,20 +1,34 @@
 #include "Game.h"
+#include "S_Collision.h"
+#include "S_Movement.h"
+#include "S_Renderer.h"
+#include "S_Movement.h"
+#include "S_Collision.h"
+#include "S_Control.h"
+#include "S_State.h"
+#include "S_SheetAnimation.h"
+
 Game::Game(): m_window("Chapter 8", sf::Vector2u(800,600)), 
-	m_entityManager(&m_systemManager, &m_textureManager), m_stateManager(&m_context)
+	m_stateManager(&m_context)
 {
 	m_clock.restart();
 	srand(time(nullptr));
 
-	m_systemManager.SetEntityManager(&m_entityManager);
-
 	m_context.m_wind = &m_window;
 	m_context.m_eventManager = m_window.GetEventManager();
 	m_context.m_textureManager = &m_textureManager;
-	m_context.m_systemManager = &m_systemManager;
-	m_context.m_entityManager = &m_entityManager;
+	m_context.m_systemManager = &m_entityX.systems;
+	m_context.m_entityManager = &m_entityX.entities;
+	m_context.m_entityXEventManager = &m_entityX.events;
 
-	// Debug:
-	m_systemManager.m_debugOverlay = &m_context.m_debugOverlay;
+	m_entityX.systems.add<S_State>(&m_context);
+	m_entityX.systems.add<S_Control>(&m_context);
+	m_entityX.systems.add<S_Movement>(&m_context);
+	m_entityX.systems.add<S_Collision>(&m_context);
+	m_entityX.systems.add<S_SheetAnimation>(&m_context);
+	m_entityX.systems.add<S_Renderer>(&m_context);
+
+	m_entityX.systems.configure();
 
 	m_stateManager.SwitchTo(StateType::Intro);
 }

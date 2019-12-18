@@ -1,8 +1,9 @@
 #include "Map.h"
 #include "StateManager.h"
+#include "C_Position.h"
 
 Map::Map(SharedContext* l_context)
-	:m_context(l_context), m_defaultTile(l_context), m_maxMapSize(32, 32), m_playerId(-1)
+	:m_context(l_context), m_defaultTile(l_context), m_maxMapSize(32, 32)
 {
 	m_context->m_gameMap = this;
 	LoadTiles("tiles.cfg");
@@ -28,7 +29,51 @@ TileInfo* Map::GetDefaultTile(){ return &m_defaultTile; }
 unsigned int Map::GetTileSize()const{ return Sheet::Tile_Size; }
 const sf::Vector2u& Map::GetMapSize()const{ return m_maxMapSize; }
 const sf::Vector2f& Map::GetPlayerStart()const{ return m_playerStart; }
-int Map::GetPlayerId()const{ return m_playerId; }
+entityx::Entity Map::GetPlayer()const{ return m_player; }
+
+entityx::Entity LoadEntity(SharedContext* sharedContext, const std::string& l_entityFile) {
+	int EntityId = -1;
+
+	std::ifstream file;
+	file.open(Utils::GetWorkingDirectory() + "media/Entities/" + l_entityFile + ".entity");
+	if (!file.is_open()) {
+		std::cout << "! Failed to load entity: " << l_entityFile << std::endl;
+		return -1;
+	}
+	std::string line;
+	while (std::getline(file, line)) {
+		if (line[0] == '|') { continue; }
+		std::stringstream keystream(line);
+		std::string type;
+		keystream >> type;
+		if (type == "Name") {
+
+		}
+		else if (type == "Attributes") {
+			if (EntityId != -1) { continue; }
+			Bitset set = 0;
+			Bitmask mask;
+			keystream >> set;
+			mask.SetMask(set);
+			EntityId = AddEntity(mask);
+			if (EntityId == -1) { return -1; }
+		}
+		else if (type == "Component") {
+			if (EntityId == -1) { continue; }
+			unsigned int c_id = 0;
+			keystream >> c_id;
+			C_Base* component = GetComponent<C_Base>(EntityId, (Component)c_id);
+			if (!component) { continue; }
+			keystream >> *component;
+			if (component->GetType() == Component::SpriteSheet) {
+				C_SpriteSheet* sheet = (C_SpriteSheet*)component;
+				sheet->Create(m_textureManager);
+			}
+		}
+	}
+	file.close();
+	return EntityId;
+}
 
 void Map::LoadMap(const std::string& l_path){
 	std::ifstream mapFile;
@@ -91,12 +136,13 @@ void Map::LoadMap(const std::string& l_path){
 			// Set up entity here.
 			std::string name;
 			keystream >> name;
-			if (name == "Player" && m_playerId != -1){ continue; }
-			int entityId = m_context->m_entityManager->AddEntity(name);
-			if (entityId < 0){ continue; }
-			if(name == "Player"){ m_playerId = entityId; }
-			C_Base* position = m_context->m_entityManager->
-				GetComponent<C_Position>(entityId,Component::Position);
+			if (name == "Player" && m_player){ continue; }
+
+			auto entity = ::LoadEntity(m_context, name);
+			if (!entity){ continue; }
+			if(name == "Player"){ m_player = entity; }
+
+			auto position = entity.assign<C_Position>();
 			if(position){ keystream >> *position; }
 		} else {
 			// Something else.
@@ -168,7 +214,7 @@ void Map::PurgeMap(){
 		m_tileMap.erase(m_tileMap.begin());
 	}
 	m_tileCount = 0;
-	m_context->m_entityManager->Purge();
+	m_context->m_entityManager->reset();
 }
 
 void Map::PurgeTileSet(){

@@ -4,6 +4,7 @@
 #include "StateManager.h"
 #include "TextureManager.h"
 #include <iostream>
+#include <entityx/entityx.h>
 
 class Game{
 public:
@@ -25,7 +26,7 @@ private:
 	SharedContext m_context;
 	Window m_window;
 	TextureManager m_textureManager;
-	SystemManager m_systemManager;
-	EntityManager m_entityManager;
 	StateManager m_stateManager;
+
+	entityx::EntityX m_entityX;
 };
