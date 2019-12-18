@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\acoross\Documents\acoross.repo\m4d.001-face_punch\external\entityx\vs2019\CMakeFiles\b566b379f87e0b03d6f435d2f6e19988\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{4DB6B8AF-53E9-3696-AE9F-6D8279C0836E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
