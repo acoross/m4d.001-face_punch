@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\entityx;$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,7 +143,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\entityx;$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +160,19 @@
     <ClInclude Include="DebugOverlay.h" />
     <ClInclude Include="Directions.h" />
     <ClInclude Include="EntityLoader.h" />
+    <ClInclude Include="entityx\3rdparty\catch.hpp" />
+    <ClInclude Include="entityx\3rdparty\simplesignal.h" />
+    <ClInclude Include="entityx\config.h" />
+    <ClInclude Include="entityx\deps\Dependencies.h" />
+    <ClInclude Include="entityx\Entity.h" />
+    <ClInclude Include="entityx\entityx.h" />
+    <ClInclude Include="entityx\Event.h" />
+    <ClInclude Include="entityx\help\NonCopyable.h" />
+    <ClInclude Include="entityx\help\Pool.h" />
+    <ClInclude Include="entityx\help\Timer.h" />
+    <ClInclude Include="entityx\quick.h" />
+    <ClInclude Include="entityx\System.h" />
+    <ClInclude Include="entityx\tags\TagsComponent.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -174,6 +187,11 @@
     <ClCompile Include="Anim_Base.cpp" />
     <ClCompile Include="Anim_Directional.cpp" />
     <ClCompile Include="EntityLoader.cpp" />
+    <ClCompile Include="entityx\Entity.cc" />
+    <ClCompile Include="entityx\Event.cc" />
+    <ClCompile Include="entityx\help\Pool.cc" />
+    <ClCompile Include="entityx\help\Timer.cc" />
+    <ClCompile Include="entityx\System.cc" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="StateManager.cpp" />

@@ -67,9 +67,6 @@
     <ClCompile Include="S_State.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\entityx\vs2019\entityx.vcxproj">
-      <Project>{5dd7781e-27bf-38ac-ad5f-be32aedac62d}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\m4d.01.engine\m4d.01.engine.vcxproj">
       <Project>{b4d447d3-0055-4d91-85b6-22b495b30eb4}</Project>
     </ProjectReference>

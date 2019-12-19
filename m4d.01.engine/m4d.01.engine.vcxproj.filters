@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="entityx">
+      <UniqueIdentifier>{68c9f6ef-4472-4e0d-8df0-4aed16fc3f83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -63,6 +66,45 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="entityx\3rdparty\catch.hpp">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\3rdparty\simplesignal.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\config.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\deps\Dependencies.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\Entity.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\entityx.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\Event.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\help\NonCopyable.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\help\Pool.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\help\Timer.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\quick.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\System.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="entityx\tags\TagsComponent.h">
+      <Filter>entityx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpriteSheet.cpp">
@@ -85,6 +127,21 @@
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entityx\Entity.cc">
+      <Filter>entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="entityx\Event.cc">
+      <Filter>entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="entityx\help\Pool.cc">
+      <Filter>entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="entityx\help\Timer.cc">
+      <Filter>entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="entityx\System.cc">
+      <Filter>entityx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
