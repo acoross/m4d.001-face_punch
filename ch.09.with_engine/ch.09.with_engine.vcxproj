@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C_Collidable.h" />
+    <ClInclude Include="C_Controller.h" />
+    <ClInclude Include="C_Drawable.h" />
+    <ClInclude Include="C_Movable.h" />
+    <ClInclude Include="C_Position.h" />
+    <ClInclude Include="C_SpriteSheet.h" />
+    <ClInclude Include="C_State.h" />
+    <ClInclude Include="ECS_Types.h" />
+    <ClInclude Include="EntityEvents.h" />
+    <ClInclude Include="EntityMessages.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="State_Game.h" />
+    <ClInclude Include="State_GameOver.h" />
+    <ClInclude Include="State_Intro.h" />
+    <ClInclude Include="State_MainMenu.h" />
+    <ClInclude Include="State_Paused.h" />
+    <ClInclude Include="S_Collision.h" />
+    <ClInclude Include="S_Control.h" />
+    <ClInclude Include="S_Movement.h" />
+    <ClInclude Include="S_Renderer.h" />
+    <ClInclude Include="S_SheetAnimation.h" />
+    <ClInclude Include="S_State.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="State_Game.cpp" />
+    <ClCompile Include="State_GameOver.cpp" />
+    <ClCompile Include="State_Intro.cpp" />
+    <ClCompile Include="State_MainMenu.cpp" />
+    <ClCompile Include="State_Paused.cpp" />
+    <ClCompile Include="S_Collision.cpp" />
+    <ClCompile Include="S_Control.cpp" />
+    <ClCompile Include="S_Movement.cpp" />
+    <ClCompile Include="S_Renderer.cpp" />
+    <ClCompile Include="S_SheetAnimation.cpp" />
+    <ClCompile Include="S_State.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\external\entityx\vs2019\entityx.vcxproj">
+      <Project>{5dd7781e-27bf-38ac-ad5f-be32aedac62d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\m4d.01.engine\m4d.01.engine.vcxproj">
+      <Project>{b4d447d3-0055-4d91-85b6-22b495b30eb4}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{17681BBB-2289-4FE1-8D7C-2E03A1A3B2F7}</ProjectGuid>
+    <RootNamespace>m4d01facepunch</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)m4d.01.engine;$(SolutionDir)External\entityx;$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>shlwapi.lib;sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\sfml\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\entityx;$(SolutionDir)External\sfml\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>shlwapi.lib;sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\sfml\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

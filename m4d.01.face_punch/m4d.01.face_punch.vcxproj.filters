@@ -1,135 +1,175 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Contents">
+      <UniqueIdentifier>{48889eb3-67b2-4c7f-b7cd-c76332593745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Components">
+      <UniqueIdentifier>{291ccd05-6fcc-40e0-91ca-87421a039f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Systems">
+      <UniqueIdentifier>{3f042c58-24c7-4ef1-b20e-07a6e25ca23d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Systems\References">
+      <UniqueIdentifier>{05ddcdb3-61d0-4761-895b-50aaf3c30f21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SpriteSheet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State_Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State_Intro.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State_MainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State_Paused.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Anim_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Anim_Directional.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Snake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Anim_Base.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_Collidable.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Anim_Directional.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_Controller.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="BaseState.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_Drawable.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Directions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_Movable.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_Position.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_SpriteSheet.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="C_State.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="SharedContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Snake.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteSheet.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="S_Renderer.h">
+      <Filter>Contents\Systems</Filter>
     </ClInclude>
     <ClInclude Include="State_Game.h">
-      <Filter>Header Files</Filter>
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="State_GameOver.h">
+      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="State_Intro.h">
-      <Filter>Header Files</Filter>
+      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="State_MainMenu.h">
-      <Filter>Header Files</Filter>
+      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="State_Paused.h">
-      <Filter>Header Files</Filter>
+      <Filter>Contents</Filter>
     </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ECS_Types.h">
+      <Filter>Contents</Filter>
     </ClInclude>
-    <ClInclude Include="TextBox.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EntityEvents.h">
+      <Filter>Contents</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EntityMessages.h">
+      <Filter>Contents</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Message.h">
+      <Filter>Contents</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Components\Collider.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Components\LocalPlayer.h">
+      <Filter>Contents\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\PoseComponent.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Renderable.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SimpleAIComponent.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SkillComponent.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SpeedUpComponent.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Velocity.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Yummy.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Body.h">
+      <Filter>Contents\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\MovementSystem.h">
+      <Filter>Contents\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PunchSystem.h">
+      <Filter>Contents\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\SubMovementSystem.h">
+      <Filter>Contents\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\InputHandleSystem.h">
+      <Filter>Contents\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Collision.h">
+      <Filter>Contents\Systems\References</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Control.h">
+      <Filter>Contents\Systems\References</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Movement.h">
+      <Filter>Contents\Systems\References</Filter>
+    </ClInclude>
+    <ClInclude Include="S_State.h">
+      <Filter>Contents\Systems\References</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="S_Renderer.cpp">
+      <Filter>Contents\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="State_Game.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="State_GameOver.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Intro.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="State_MainMenu.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Paused.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Systems\MovementSystem.cpp">
+      <Filter>Contents\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PunchSystem.cpp">
+      <Filter>Contents\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\SubMovementSystem.cpp">
+      <Filter>Contents\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\InputHandleSystem.cpp">
+      <Filter>Contents\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Collision.cpp">
+      <Filter>Contents\Systems\References</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Control.cpp">
+      <Filter>Contents\Systems\References</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Movement.cpp">
+      <Filter>Contents\Systems\References</Filter>
+    </ClCompile>
+    <ClCompile Include="S_State.cpp">
+      <Filter>Contents\Systems\References</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
