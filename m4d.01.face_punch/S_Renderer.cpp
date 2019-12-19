@@ -2,7 +2,6 @@
 #include "EntityEvents.h"
 #include "EntityMessages.h"
 #include "C_Position.h"
-#include "C_SpriteSheet.h"
 
 S_Renderer::S_Renderer(SharedContext* sharedContext)
 	: m_sharedContext(sharedContext)

@@ -12,20 +12,10 @@ struct SharedContext{
 	SharedContext():
 		m_wind(nullptr),
 		m_eventManager(nullptr),
-		m_textureManager(nullptr),
-		m_systemManager(nullptr),
-		m_entityManager(nullptr),
-		m_entityXEventManager(nullptr),
-		m_entityLoader(nullptr),
-		m_gameMap(nullptr){}
+		m_textureManager(nullptr){}
 
 	Window* m_wind;
 	EventManager* m_eventManager;
 	TextureManager* m_textureManager;
-	entityx::SystemManager* m_systemManager;
-	entityx::EntityManager* m_entityManager;
-	entityx::EventManager* m_entityXEventManager;
-	EntityLoader* m_entityLoader;
-	Map* m_gameMap;
 	DebugOverlay m_debugOverlay;
 };

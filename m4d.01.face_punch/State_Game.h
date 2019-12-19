@@ -1,8 +1,8 @@
 #pragma once
-#include "BaseState.h"
-#include "Map.h"
-#include "EventManager.h"
 #include <entityx/entityx.h>
+#include "BaseState.h"
+#include "EventManager.h"
+#include "GameContext.h"
 
 class State_Game : public BaseState{
 public:
@@ -20,13 +20,15 @@ public:
 
 	void MainMenu(EventDetails* l_details);
 	void Pause(EventDetails* l_details);
-	void PlayerMove(EventDetails* l_details);
 
 	// Debug:
 	void ToggleOverlay(EventDetails* l_details);
 private:
 	void UpdateCamera();
 
-	Map* m_gameMap;
+	entityx::EntityX m_entityX;
+	EntityLoader m_entityLoader;
+	GameContext m_gameContext;
+
 	entityx::Entity m_player;
 };

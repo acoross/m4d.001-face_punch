@@ -1,5 +1,5 @@
-#include "Game.h"
 #include <entityx/entityx.h>
+#include "Game.h"
 
 void main(int argc, void** argv[]){
 	// Program entry point.

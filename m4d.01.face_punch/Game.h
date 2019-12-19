@@ -5,7 +5,6 @@
 #include "EventManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
-#include "EntityLoader.h"
 
 class Game{
 public:
@@ -28,7 +27,4 @@ private:
 	Window m_window;
 	TextureManager m_textureManager;
 	StateManager m_stateManager;
-
-	entityx::EntityX m_entityX;
-	EntityLoader m_entityLoader;
 };
