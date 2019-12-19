@@ -1,5 +1,6 @@
 #pragma once
-#include "entityx/Entity.h"
+
+#include <entityx/entityx.h>
 
 using MessageType = unsigned int;
 struct TwoFloats{ float m_x; float m_y; };

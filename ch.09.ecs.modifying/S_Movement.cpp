@@ -1,6 +1,5 @@
 #include "S_Movement.h"
 #include "Map.h"
-#include "EntityMessages.h"
 #include "C_Movable.h"
 
 S_Movement::S_Movement(SharedContext* sharedContext)
@@ -30,7 +29,7 @@ void S_Movement::update(entityx::EntityManager& entities, entityx::EventManager&
 
 void S_Movement::receive(const EntityEventData& event)
 {
-	auto entity = m_sharedContext->m_entityManager->get(event.Entity.id);
+	auto entity = m_sharedContext->m_entityManager->get(event.Entity.id());
 
 	switch(event.EventId){
 	case EntityEvent::Colliding_X: StopEntity(entity,Axis::x); break;
@@ -54,7 +53,7 @@ void S_Movement::receive(const EntityEventData& event)
 
 void S_Movement::receive(const Message& l_message)
 {
-	auto receiver = m_sharedContext->m_entityManager->get(l_message.m_receiver.id);
+	auto receiver = m_sharedContext->m_entityManager->get(l_message.m_receiver.id());
 
 	EntityMessage m = (EntityMessage)l_message.m_type;
 	switch(m){

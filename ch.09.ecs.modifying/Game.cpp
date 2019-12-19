@@ -7,6 +7,12 @@
 #include "S_Control.h"
 #include "S_State.h"
 #include "S_SheetAnimation.h"
+#include "C_Position.h"
+#include "C_SpriteSheet.h"
+#include "C_State.h"
+#include "C_Movable.h"
+#include "C_Controller.h"
+#include "C_Collidable.h"
 
 Game::Game(): m_window("Chapter 8", sf::Vector2u(800,600)), 
 	m_stateManager(&m_context)
@@ -14,19 +20,27 @@ Game::Game(): m_window("Chapter 8", sf::Vector2u(800,600)),
 	m_clock.restart();
 	srand(time(nullptr));
 
+	m_entityLoader.Register<C_Position>((CompId)Component::Position);
+	m_entityLoader.Register<C_SpriteSheet>((CompId)Component::SpriteSheet);
+	m_entityLoader.Register<C_State>((CompId)Component::State);
+	m_entityLoader.Register<C_Movable>((CompId)Component::Movable);
+	m_entityLoader.Register<C_Controller>((CompId)Component::Controller);
+	m_entityLoader.Register<C_Collidable>((CompId)Component::Collidable);
+
 	m_context.m_wind = &m_window;
 	m_context.m_eventManager = m_window.GetEventManager();
 	m_context.m_textureManager = &m_textureManager;
 	m_context.m_systemManager = &m_entityX.systems;
 	m_context.m_entityManager = &m_entityX.entities;
 	m_context.m_entityXEventManager = &m_entityX.events;
+	m_context.m_entityLoader = &m_entityLoader;
 
-	m_entityX.systems.add<S_State>(&m_context);
-	m_entityX.systems.add<S_Control>(&m_context);
-	m_entityX.systems.add<S_Movement>(&m_context);
-	m_entityX.systems.add<S_Collision>(&m_context);
-	m_entityX.systems.add<S_SheetAnimation>(&m_context);
-	m_entityX.systems.add<S_Renderer>(&m_context);
+	auto sState = m_entityX.systems.add<S_State>(&m_context);
+	auto sControl = m_entityX.systems.add<S_Control>(&m_context);
+	auto sMovement = m_entityX.systems.add<S_Movement>(&m_context);
+	auto sCollision = m_entityX.systems.add<S_Collision>(&m_context);
+	auto sSheetAnimation = m_entityX.systems.add<S_SheetAnimation>(&m_context);
+	auto sRenderer = m_entityX.systems.add<S_Renderer>(&m_context);
 
 	m_entityX.systems.configure();
 

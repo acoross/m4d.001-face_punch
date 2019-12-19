@@ -1,7 +1,11 @@
 #pragma once
-#include "S_Base.h"
 #include <entityx/entityx.h>
 #include "SharedContext.h"
+#include "C_Collidable.h"
+#include "C_Position.h"
+#include "EntityEvents.h"
+#include "EntityMessages.h"
+#include "Message.h"
 
 struct TileInfo;
 class Map;

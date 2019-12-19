@@ -1,5 +1,8 @@
 #include "S_Renderer.h"
-#include "System_Manager.h"
+#include "EntityEvents.h"
+#include "EntityMessages.h"
+#include "C_Position.h"
+#include "C_SpriteSheet.h"
 
 S_Renderer::S_Renderer(SharedContext* sharedContext)
 	: m_sharedContext(sharedContext)
@@ -10,65 +13,72 @@ S_Renderer::~S_Renderer(){}
 
 void S_Renderer::configure(entityx::EventManager& eventManager)
 {
-	m_systemManager->GetMessageHandler()->Subscribe(EntityMessage::Direction_Changed, this);
+	eventManager.subscribe<EntityEventData>(*this);
+	eventManager.subscribe<Message>(*this);
 }
 
 void S_Renderer::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt)
 {
+	entities.each<C_Position, C_SpriteSheet>([](auto entity, auto& position, auto& drawable)
+		{
+			drawable.UpdatePosition(position.GetPosition());
+		});
 }
 
 void S_Renderer::receive(const EntityEventData& event)
 {
-}
-
-void S_Renderer::receive(const Message& l_message)
-{
-}
-
-void S_Renderer::Update(float l_dT){
-	EntityManager* entities = m_systemManager->GetEntityManager();
-	for(auto &entity : m_entities)
-	{
-		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
-		C_Drawable* drawable = nullptr;
-		if (entities->HasComponent(entity, Component::SpriteSheet)){
-			drawable = entities->GetComponent<C_Drawable>(entity, Component::SpriteSheet);
-		} else { continue; }
-		drawable->UpdatePosition(position->GetPosition());
-	}
-}
-
-void S_Renderer::HandleEvent(const EntityId& l_entity, const EntityEvent& l_event)
-{
+	auto l_event = event.EventId;
 	if (l_event == EntityEvent::Moving_Left || l_event == EntityEvent::Moving_Right ||
 		l_event == EntityEvent::Moving_Up || l_event == EntityEvent::Moving_Down ||
 		l_event == EntityEvent::Elevation_Change || l_event == EntityEvent::Spawned)
 	{
-		SortDrawables();
+		m_changed = true;
 	}
 }
 
-void S_Renderer::Notify(const Message& l_message){
-	if(HasEntity(l_message.m_receiver)){
-		EntityMessage m = (EntityMessage)l_message.m_type;
-		switch(m){
-		case EntityMessage::Direction_Changed: 
-			SetSheetDirection(l_message.m_receiver, (Direction)l_message.m_int);
-			break;
-		}
+void S_Renderer::receive(const Message& l_message)
+{
+	entityx::Entity receiver = m_sharedContext->m_entityManager->get(l_message.m_receiver.id());
+	EntityMessage m = (EntityMessage)l_message.m_type;
+	switch (m) {
+	case EntityMessage::Direction_Changed:
+		SetSheetDirection(receiver, (Direction)l_message.m_int);
+		break;
 	}
 }
 
 void S_Renderer::Render(Window* l_wind, unsigned int l_layer)
 {
-	EntityManager* entities = m_systemManager->GetEntityManager();
-	for(auto &entity : m_entities){
-		C_Position* position = entities->GetComponent<C_Position>(entity, Component::Position);
+	auto entities = m_sharedContext->m_entityManager->entities_with_components<C_Position>();
+	std::vector<entityx::Entity> sorted;
+	
+	for (auto iter : entities)
+	{
+		sorted.push_back(iter);
+	}
+
+	std::sort(sorted.begin(), sorted.end(),
+		[this](entityx::Entity l_1, entityx::Entity l_2)
+		{
+			auto pos1 = l_1.component<C_Position>();
+			auto pos2 = l_2.component<C_Position>();
+			if (pos1->GetElevation() == pos2->GetElevation()) {
+				return pos1->GetPosition().y < pos2->GetPosition().y;
+			}
+			return pos1->GetElevation() < pos2->GetElevation();
+		});
+
+	for(auto entity : sorted){
+		auto position = entity.component<C_Position>();
 		if(position->GetElevation() < l_layer){ continue; }
 		if(position->GetElevation() > l_layer){ break; }
-		C_Drawable* drawable = nullptr;
-		if (!entities->HasComponent(entity, Component::SpriteSheet)){ continue; }
-		drawable = entities->GetComponent<C_Drawable>(entity, Component::SpriteSheet);
+
+		if (!entity.has_component<C_SpriteSheet>())
+		{
+			continue;
+		}
+
+		auto drawable = entity.component<C_SpriteSheet>();
 		sf::FloatRect drawableBounds;
 		drawableBounds.left = position->GetPosition().x - (drawable->GetSize().x / 2);
 		drawableBounds.top = position->GetPosition().y - drawable->GetSize().y;
@@ -79,24 +89,10 @@ void S_Renderer::Render(Window* l_wind, unsigned int l_layer)
 	}
 }
 
-void S_Renderer::SetSheetDirection(const EntityId& l_entity, const Direction& l_dir)
+void S_Renderer::SetSheetDirection(entityx::Entity& l_entity, const Direction& l_dir)
 {
-	EntityManager* entities = m_systemManager->GetEntityManager();
-	if (!entities->HasComponent(l_entity, Component::SpriteSheet)){ return; }
-	C_SpriteSheet* sheet = entities->GetComponent<C_SpriteSheet>(l_entity,Component::SpriteSheet);
-	sheet->GetSpriteSheet()->SetDirection(l_dir);
-}
-
-void S_Renderer::SortDrawables(){
-	EntityManager* e_mgr = m_systemManager->GetEntityManager();
-	std::sort(m_entities.begin(), m_entities.end(),
-		[e_mgr](unsigned int l_1, unsigned int l_2)
+	if (auto sheet = l_entity.component<C_SpriteSheet>())
 	{
-		auto pos1 = e_mgr->GetComponent<C_Position>(l_1, Component::Position);
-		auto pos2 = e_mgr->GetComponent<C_Position>(l_2, Component::Position);
-		if (pos1->GetElevation() == pos2->GetElevation()){
-			return pos1->GetPosition().y < pos2->GetPosition().y;
-		}
-		return pos1->GetElevation() < pos2->GetElevation();
-	});
+		sheet->GetSpriteSheet()->SetDirection(l_dir);
+	}
 }

@@ -118,49 +118,28 @@
     <ClInclude Include="Anim_Base.h">
       <Filter>Engine\GameFrameworks</Filter>
     </ClInclude>
-    <ClInclude Include="ECS_Types.h">
-      <Filter>Engine\ECS</Filter>
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>Engine\GameFrameworks</Filter>
     </ClInclude>
-    <ClInclude Include="Entity_Manager.h">
-      <Filter>Engine\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityEvents.h">
-      <Filter>Engine\ECS</Filter>
+    <ClInclude Include="Game.h">
+      <Filter>Engine\GameFrameworks</Filter>
     </ClInclude>
     <ClInclude Include="C_Base.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="S_Base.h">
+    <ClInclude Include="ECS_Types.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
     <ClInclude Include="EntityMessages.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Event_Queue.h">
-      <Filter>Engine\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="MessageHandler.h">
+    <ClInclude Include="EntityEvents.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="DebugOverlay.h">
-      <Filter>Engine\GameFrameworks</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Engine\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="System_Manager.h">
-      <Filter>Engine\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="Communicator.h">
-      <Filter>Engine\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Engine\GameFrameworks</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmask.h">
+    <ClInclude Include="EntityLoader.h">
       <Filter>Engine\ECS</Filter>
     </ClInclude>
   </ItemGroup>
@@ -220,17 +199,11 @@
     <ClCompile Include="Anim_Base.cpp">
       <Filter>Engine\GameFrameworks</Filter>
     </ClCompile>
-    <ClCompile Include="Entity_Manager.cpp">
-      <Filter>Engine\ECS</Filter>
-    </ClCompile>
-    <ClCompile Include="S_Base.cpp">
-      <Filter>Engine\ECS</Filter>
-    </ClCompile>
-    <ClCompile Include="System_Manager.cpp">
-      <Filter>Engine\ECS</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityLoader.cpp">
+      <Filter>Engine\ECS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

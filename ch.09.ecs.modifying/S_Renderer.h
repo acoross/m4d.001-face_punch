@@ -1,12 +1,15 @@
 #pragma once
-#include "S_Base.h"
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <entityx/entityx.h>
 #include "Window.h"
 #include "SharedContext.h"
+#include "EntityEvents.h"
+#include "EntityMessages.h"
+#include "Message.h"
+#include "Directions.h"
 
-class S_Renderer : public entityx::System<S_Renderer> {
+class S_Renderer : public entityx::System<S_Renderer>, public entityx::Receiver<S_Renderer> {
 public:
 	S_Renderer(SharedContext* sharedContext);
 	~S_Renderer();
@@ -18,8 +21,8 @@ public:
 	
 	void Render(Window* l_wind, unsigned int l_layer);
 private:
-	void SetSheetDirection(const EntityId& l_entity, const Direction& l_dir);
-	void SortDrawables();
+	void SetSheetDirection(entityx::Entity& l_entity, const Direction& l_dir);
 
-	SharedContext* m_sharedContext
+	SharedContext* m_sharedContext;
+	bool m_changed = false;
 };

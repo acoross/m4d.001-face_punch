@@ -1,15 +1,22 @@
 #pragma once
-#include "S_Base.h"
+#include <entityx/entityx.h>
+#include "SharedContext.h"
+#include "EntityEvents.h"
+#include "EntityMessages.h"
+#include "Message.h"
 
-class S_SheetAnimation : public S_Base{
+class S_SheetAnimation : public entityx::System<S_SheetAnimation>, public entityx::Receiver<S_SheetAnimation>{
 public:
-	S_SheetAnimation(SystemManager* l_systemMgr);
+	S_SheetAnimation(SharedContext* sharedContext);
 	~S_SheetAnimation();
 
-	void Update(float l_dT);
-	void HandleEvent(const EntityId& l_entity,const EntityEvent& l_event);
-	void Notify(const Message& l_message);
+	void configure(entityx::EventManager& eventManager) override;
+	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
+	void receive(const Message& l_message);
+
 private:
-	void ChangeAnimation(const EntityId& l_entity, 
+	void ChangeAnimation(entityx::Entity& l_entity, 
 		const std::string& l_anim, bool l_play, bool l_loop);
+
+	SharedContext* m_sharedContext;
 };

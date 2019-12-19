@@ -3,6 +3,7 @@
 #include "S_Collision.h"
 #include "S_Movement.h"
 #include "S_Renderer.h"
+#include "EntityMessages.h"
 
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager){}
@@ -116,7 +117,8 @@ void State_Game::PlayerMove(EventDetails* l_details){
 		msg.m_int = (int)Direction::Down;
 	}
 	msg.m_receiver = m_player;
-	m_stateMgr->GetContext()->m_systemManager->GetMessageHandler()->Dispatch(msg);
+	
+	m_stateMgr->GetContext()->m_entityXEventManager->emit(msg);
 }
 
 void State_Game::ToggleOverlay(EventDetails* l_details){

@@ -1,10 +1,11 @@
 #pragma once
+#include <iostream>
+#include <entityx/entityx.h>
 #include "Window.h"
 #include "EventManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
-#include <iostream>
-#include <entityx/entityx.h>
+#include "EntityLoader.h"
 
 class Game{
 public:
@@ -29,4 +30,5 @@ private:
 	StateManager m_stateManager;
 
 	entityx::EntityX m_entityX;
+	EntityLoader m_entityLoader;
 };

@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "StateManager.h"
 #include "C_Position.h"
+#include "C_SpriteSheet.h"
 
 Map::Map(SharedContext* l_context)
 	:m_context(l_context), m_defaultTile(l_context), m_maxMapSize(32, 32)
@@ -32,14 +33,15 @@ const sf::Vector2f& Map::GetPlayerStart()const{ return m_playerStart; }
 entityx::Entity Map::GetPlayer()const{ return m_player; }
 
 entityx::Entity LoadEntity(SharedContext* sharedContext, const std::string& l_entityFile) {
-	int EntityId = -1;
-
+	entityx::Entity entity;
+	
 	std::ifstream file;
 	file.open(Utils::GetWorkingDirectory() + "media/Entities/" + l_entityFile + ".entity");
 	if (!file.is_open()) {
 		std::cout << "! Failed to load entity: " << l_entityFile << std::endl;
-		return -1;
+		return entity;
 	}
+
 	std::string line;
 	while (std::getline(file, line)) {
 		if (line[0] == '|') { continue; }
@@ -50,29 +52,24 @@ entityx::Entity LoadEntity(SharedContext* sharedContext, const std::string& l_en
 
 		}
 		else if (type == "Attributes") {
-			if (EntityId != -1) { continue; }
-			Bitset set = 0;
-			Bitmask mask;
-			keystream >> set;
-			mask.SetMask(set);
-			EntityId = AddEntity(mask);
-			if (EntityId == -1) { return -1; }
+			entity = sharedContext->m_entityManager->create();
 		}
 		else if (type == "Component") {
-			if (EntityId == -1) { continue; }
+			if (!entity) { continue; }
+
 			unsigned int c_id = 0;
 			keystream >> c_id;
-			C_Base* component = GetComponent<C_Base>(EntityId, (Component)c_id);
+			C_Base* component = sharedContext->m_entityLoader->Assign(entity, c_id);
 			if (!component) { continue; }
 			keystream >> *component;
 			if (component->GetType() == Component::SpriteSheet) {
 				C_SpriteSheet* sheet = (C_SpriteSheet*)component;
-				sheet->Create(m_textureManager);
+				sheet->Create(sharedContext->m_textureManager);
 			}
 		}
 	}
 	file.close();
-	return EntityId;
+	return entity;
 }
 
 void Map::LoadMap(const std::string& l_path){
@@ -142,7 +139,7 @@ void Map::LoadMap(const std::string& l_path){
 			if (!entity){ continue; }
 			if(name == "Player"){ m_player = entity; }
 
-			auto position = entity.assign<C_Position>();
+			auto position = entity.component<C_Position>();
 			if(position){ keystream >> *position; }
 		} else {
 			// Something else.

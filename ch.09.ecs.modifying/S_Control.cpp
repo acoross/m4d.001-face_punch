@@ -1,5 +1,4 @@
 #include "S_Control.h"
-#include "System_Manager.h"
 #include "C_Movable.h"
 
 S_Control::S_Control(SharedContext* sharedContext)
@@ -20,7 +19,7 @@ void S_Control::update(entityx::EntityManager& entities, entityx::EventManager& 
 
 void S_Control::receive(const EntityEventData& event)
 {
-	auto entity = m_sharedContext->m_entityManager->get(event.Entity.id);
+	auto entity = m_sharedContext->m_entityManager->get(event.Entity.id());
 
 	switch (event.EventId)
 	{

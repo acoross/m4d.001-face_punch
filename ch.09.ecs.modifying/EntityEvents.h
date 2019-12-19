@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entityx/Entity.h"
+#include <entityx/entityx.h>
 
 enum class EntityEvent{ 
 	Spawned, Despawned, Colliding_X, Colliding_Y, 

@@ -1,17 +1,18 @@
 #pragma once
 #include <entityx/entityx.h>
-#include "EntityEvents.h"
 #include "Message.h"
-#include "C_Movable.h"
-#include "C_Position.h"
+#include "EntityMessages.h"
+#include "EntityEvents.h"
 #include "Directions.h"
 #include "SharedContext.h"
+#include "C_Movable.h"
+#include "C_Position.h"
 
 enum class Axis{ x, y };
 
 class Map;
 
-class S_Movement : public entityx::System<S_Movement> {
+class S_Movement : public entityx::System<S_Movement>, public entityx::Receiver<S_Movement> {
 public:
 	S_Movement(SharedContext* sharedContext);
 	~S_Movement();

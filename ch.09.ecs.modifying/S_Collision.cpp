@@ -1,5 +1,4 @@
 #include "S_Collision.h"
-#include "System_Manager.h"
 #include "Map.h"
 
 S_Collision::S_Collision(SharedContext* sharedContext)
