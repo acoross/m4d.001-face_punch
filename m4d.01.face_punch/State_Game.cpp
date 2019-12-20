@@ -6,6 +6,12 @@
 #include "Directions.h"
 #include "EntityMessages.h"
 
+//
+#include "C_Position.h"
+#include "C_Drawable.h"
+//
+#include "S_Renderer.h"
+
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager), m_gameContext{0,}
 {}
@@ -29,7 +35,18 @@ void State_Game::OnCreate(){
 	m_gameContext.eventManager = &m_entityX.events;
 	m_gameContext.sharedContext = m_stateMgr->GetContext();
 
+	auto renderer = m_entityX.systems.add<S_Renderer>(&m_gameContext);
+
 	m_entityX.systems.configure();
+
+	auto player = m_entityX.entities.create();
+	auto position = player.assign<C_Position>();
+	position->SetElevation(0);
+	position->SetPosition(10, 10);
+
+	auto drawable = player.assign<C_Drawable>();
+	drawable->SetSize(sf::Vector2f(10, 10));
+	drawable->SetColor(sf::Color::White);
 
 	//m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
 	//m_gameMap->LoadMap("media/Maps/map1.map");
@@ -64,12 +81,13 @@ void State_Game::UpdateCamera(){
 		return; 
 	}
 
-	/*SharedContext* context = m_stateMgr->GetContext();
-	auto pos = m_player.component<C_Position>();
+	SharedContext* context = m_stateMgr->GetContext();
+	//auto pos = m_player.component<C_Position>();
 
-	m_view.setCenter(pos->GetPosition());
+	//m_view.setCenter(pos->GetPosition());
 	context->m_wind->GetRenderWindow()->setView(m_view);
 
+	/*
 	sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
 	if (viewSpace.left <= 0){
 		m_view.setCenter(viewSpace.width / 2, m_view.getCenter().y);
@@ -85,18 +103,25 @@ void State_Game::UpdateCamera(){
 	} else if (viewSpace.top + viewSpace.height > (m_gameMap->GetMapSize().y) * Sheet::Tile_Size){
 		m_view.setCenter(m_view.getCenter().x, ((m_gameMap->GetMapSize().y) * Sheet::Tile_Size) - (viewSpace.height / 2));
 		context->m_wind->GetRenderWindow()->setView(m_view);
-	}*/
+	}
+	*/
 }
 
 void State_Game::Draw(){
-	/*for(unsigned int i = 0; i < Sheet::Num_Layers; ++i){
-		m_gameMap->Draw(i);
+	auto renderer = m_entityX.systems.system<S_Renderer>();
+	if (renderer)
+	{
+		renderer->Sort();
+	}
 
-		if (auto renderer = m_stateMgr->GetContext()->m_systemManager->system<S_Renderer>())
+	for (unsigned int i = 0; i < 3; ++i){
+		//m_gameMap->Draw(i);
+
+		if (renderer)
 		{
 			renderer->Render(m_stateMgr->GetContext()->m_wind, i);
 		}
-	}*/
+	}
 }
 
 void State_Game::MainMenu(EventDetails* l_details){

@@ -38,6 +38,9 @@
     <ClInclude Include="S_Renderer.h">
       <Filter>Contents</Filter>
     </ClInclude>
+    <ClInclude Include="C_Position.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
