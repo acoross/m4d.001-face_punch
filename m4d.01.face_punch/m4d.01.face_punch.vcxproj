@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Body.h" />
     <ClInclude Include="Components\Velocity.h" />
     <ClInclude Include="C_Drawable.h" />
     <ClInclude Include="C_Position.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="State_MainMenu.h" />
     <ClInclude Include="State_Paused.h" />
     <ClInclude Include="Systems\MovementSystem.h" />
+    <ClInclude Include="Systems\PunchSystem.h" />
     <ClInclude Include="Systems\SubMovementSystem.h" />
     <ClInclude Include="S_Renderer.h" />
   </ItemGroup>
@@ -35,6 +37,7 @@
     <ClCompile Include="State_MainMenu.cpp" />
     <ClCompile Include="State_Paused.cpp" />
     <ClCompile Include="Systems\MovementSystem.cpp" />
+    <ClCompile Include="Systems\PunchSystem.cpp" />
     <ClCompile Include="Systems\SubMovementSystem.cpp" />
     <ClCompile Include="S_Renderer.cpp" />
   </ItemGroup>

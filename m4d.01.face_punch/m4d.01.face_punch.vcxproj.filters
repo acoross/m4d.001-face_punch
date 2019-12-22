@@ -59,6 +59,12 @@
     <ClInclude Include="Systems\SubMovementSystem.h">
       <Filter>GameState\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Body.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PunchSystem.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -85,6 +91,9 @@
       <Filter>GameState\Systems</Filter>
     </ClCompile>
     <ClCompile Include="Systems\SubMovementSystem.cpp">
+      <Filter>GameState\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PunchSystem.cpp">
       <Filter>GameState\Systems</Filter>
     </ClCompile>
   </ItemGroup>

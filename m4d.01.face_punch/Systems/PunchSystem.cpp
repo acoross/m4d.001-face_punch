@@ -1,19 +1,21 @@
 #include "PunchSystem.h"
-#include "Body.h"
-#include "PoseComponent.h"
-#include "Renderable.h"
-#include "Game.h"
-#include "Velocity.h"
+
+#include <cmath>
+#include "../Components/Body.h"
+#include "../C_Position.h"
+#include "../Components/Velocity.h"
+#include "../C_Drawable.h"
 
 using namespace entityx;
 
 namespace
 {
-	const float accel = 100.f;
-	const float startVelocity = 30.f;
+	const float accel = 50.f;
+	const float startVelocity = 10.f;
 }
 
-PunchSystem::PunchSystem()
+PunchSystem::PunchSystem(GameContext* gameContext)
+	: GameSystem(gameContext)
 {
 }
 
@@ -21,48 +23,57 @@ PunchSystem::~PunchSystem()
 {
 }
 
-static void SendPunchRpc(entityx::EventManager& events, Entity entity, const Body& body)
+static float length(sf::Vector2f vec)
 {
-	events.emit(
-		PunchRpc
-		{
-		    entity,
-		    body.currentHand,
-		    body.punchingState,
-		    body.punchingTimeElapsed,
-		    body.relativeTargetPos,
-		    body.punchVelocity
-		});
+	return std::sqrt(vec.x * vec.x + vec.y + vec.y);
 }
 
-static void StartPunch(entityx::EntityManager& entities, entityx::EventManager& events, Entity entity, Body& body, PoseComponent& pose)
+static float dist(sf::Vector2f vec1, sf::Vector2f vec2)
+{
+	return length(vec1 - vec2);
+}
+
+static sf::Vector2f norm(sf::Vector2f vec)
+{
+	float len = length(vec);
+	if (len > std::numeric_limits<float>::epsilon())
+	{
+		return vec / len;
+	}
+
+	return vec;
+}
+
+static void StartPunch(
+	entityx::EntityManager& entities, entityx::EventManager& events, Entity entity, Body& body, C_Position& pose)
 {
 	body.punchingState = PunchingState::Punching;
 	body.punchVelocity = startVelocity;
 	body.punchingTimeElapsed = 0;
-	body.relativeTargetPos = dirVector(0) * (body.radius * 4);
+	body.relativeTargetPos = sf::Vector2f(1, 0) * (body.radius * 4);
 
-	auto punchRenderable = body.currentPunchHand()->entity.component<Renderable>();
+	/*auto punchRenderable = body.currentPunchHand()->entity.component<C_Drawable>();
 	float punchRad = punchRenderable->width * 0.5f;
-	body.currentPunchHand()->entity.assign<PunchCollider>(entity, punchRad);
+	body.currentPunchHand()->entity.assign<PunchCollider>(entity, punchRad);*/
 
-	float3 worldTargetPos = local2world((float3)pose, (float3)body.relativeTargetPos);
+	/*sf::Transform t;
+	t.rotate(pose.GetAngle());
+	auto worldTargetPos = t.transformPoint(body.relativeTargetPos);
+	
 	body.targetPointEntity = entities.create();
 	body.targetPointEntity.assign<Renderable>(10);
-	body.targetPointEntity.assign<PoseComponent>(worldTargetPos);
+	body.targetPointEntity.assign<PoseComponent>(worldTargetPos);*/
 
 	body.punchTrigger = false;
 	body.myPunchHit = false;
-
-	SendPunchRpc(events, entity, body);
 }
 
 static void ChangePunchHand(Body& body)
 {
 	if (body.currentPunchHand())
 	{
-		auto punchRenderable = body.currentPunchHand()->entity.component<Renderable>();
-		punchRenderable->border = 1;
+		/*auto punchRenderable = body.currentPunchHand()->entity.component<Renderable>();
+		punchRenderable->border = 1;*/
 	}
 
 	if (body.currentHand == HandType::Left)
@@ -74,101 +85,53 @@ static void ChangePunchHand(Body& body)
 		body.setCurrentPunchHand(HandType::Left);
 	}
 
-	auto punchRenderable = body.currentPunchHand()->entity.component<Renderable>();
-	punchRenderable->border = 3;
+	/*auto punchRenderable = body.currentPunchHand()->entity.component<Renderable>();
+	punchRenderable->border = 3;*/
 }
 
-static float2& GetSubPos(entityx::Entity entity)
+static sf::Vector2f GetSubPos(entityx::Entity entity)
 {
-	return entity.component<SubPoseComponent>()->GetPosRef();
+	return entity.component<C_SubPos>()->GetRelative();
 }
 
-static void SetSubPos(Entity entity, float2 pos)
+static void SetSubPos(Entity entity, sf::Vector2f pos)
 {
 	if (entity)
 	{
-		if (auto subPos = entity.component<SubPoseComponent>())
+		if (auto subPos = entity.component<C_SubPos>())
 		{
-			subPos->GetPosRef() = pos;
+			subPos->SetRelative(pos);
 		}
 	}
 }
 
-static void AddSubPos(Entity entity, float2 pos)
+static void AddSubPos(Entity entity, sf::Vector2f pos)
 {
 	if (entity)
 	{
-		if (auto subPos = entity.component<SubPoseComponent>())
+		if (auto subPos = entity.component<C_SubPos>())
 		{
-			subPos->GetPosRef() += pos;
+			auto newRelative = subPos->GetRelative() + pos;
+			subPos->SetRelative(newRelative);
 		}
 	}
 }
 
-static void EndPunch(EventManager& events, Entity entity, Body& body)
+static void EndPunch(Entity entity, Body& body)
 {
 	body.punchingState = PunchingState::NotPunching;
 	body.punchVelocity = 0;
-	SetSubPos(body.currentPunchHand()->entity, body.currentPunchHand()->pose.get2());
-	body.currentPunchHand()->entity.remove<PunchCollider>();
+	SetSubPos(body.currentPunchHand()->entity, body.currentPunchHand()->pos);
+	//body.currentPunchHand()->entity.remove<PunchCollider>();
 
-	body.targetPointEntity.destroy();
+	//body.targetPointEntity.destroy();
 	body.myPunchHit = false;
-
-	SendPunchRpc(events, entity, body);
-}
-
-void UpdateClient(
-	entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt,
-	Entity entity, Body& body, PoseComponent& pose)
-{
-	if (!body.currentPunchHand())
-	{
-		return;
-	}
-
-	auto& currentHand = *body.currentPunchHand();
-	if (!currentHand.entity)
-	{
-		return;
-	}
-
-	switch (body.punchingState)
-	{
-	case PunchingState::NotPunching:
-		SetSubPos(body.leftHand.entity, body.leftHand.pose.get2());
-		SetSubPos(body.rightHand.entity, body.rightHand.pose.get2());
-		break;
-	case PunchingState::Punching:
-	{
-		body.punchingTimeElapsed += dt;
-		body.punchVelocity += accel * dt;
-
-		float2 dir = sub(body.relativeTargetPos, currentHand.pose.get2());
-		float2 move = norm(dir) * body.punchVelocity;
-		AddSubPos(currentHand.entity, move);
-	}
-	break;
-	case PunchingState::PunchingBack:
-	{
-		body.punchingTimeElapsed += dt;
-		body.punchVelocity += accel * dt;
-
-		if (body.punchVelocity < -startVelocity)
-		{
-			float2 dir = sub(body.relativeTargetPos, currentHand.pose.get2());
-			float2 move = norm(dir) * body.punchVelocity;
-			AddSubPos(currentHand.entity, move);
-		}
-	}
-	break;
-	}
 }
 
 void PunchSystem::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt)
 {
-	entities.each<Body, PoseComponent, Velocity>(
-		[&entities, &events, dt](Entity entity, Body& body, PoseComponent& pose, Velocity& vel)
+	entities.each<Body, C_Position, Velocity>(
+		[&entities, &events, dt](Entity entity, Body& body, C_Position& pose, Velocity& vel)
 		{
 			if (!body.currentPunchHand())
 			{
@@ -180,8 +143,8 @@ void PunchSystem::update(entityx::EntityManager& entities, entityx::EventManager
 			switch (body.punchingState)
 			{
 			case PunchingState::NotPunching:
-				SetSubPos(body.leftHand.entity, body.leftHand.pose.get2());
-				SetSubPos(body.rightHand.entity, body.rightHand.pose.get2());
+				SetSubPos(body.leftHand.entity, body.leftHand.pos);
+				SetSubPos(body.rightHand.entity, body.rightHand.pos);
 
 				if (body.punchTrigger)
 				{
@@ -190,26 +153,20 @@ void PunchSystem::update(entityx::EntityManager& entities, entityx::EventManager
 				break;
 			case PunchingState::Punching:
 			{
-				/*vel.x = 0;
-				vel.y = 0;
-				vel.yaw = pose.yaw;*/
-
 				body.punchingTimeElapsed += dt;
 				body.punchVelocity += accel * dt;
 
-				float2 dir = sub(body.relativeTargetPos, currentHand.pose.get2());
-				float2 move = norm(dir) * body.punchVelocity;
+				auto dir = body.relativeTargetPos - currentHand.pos;
+				auto move = norm(dir) * body.punchVelocity;
 				AddSubPos(currentHand.entity, move);
 
-				float orgHand2Hand = dist(currentHand.pose.get2(), GetSubPos(currentHand.entity));
-				float orgHand2Target = magnitude(dir);
+				float orgHand2Hand = dist(currentHand.pos, GetSubPos(currentHand.entity));
+				float orgHand2Target = length(dir);
 				if (orgHand2Hand > orgHand2Target || body.myPunchHit)
 				{
 					body.punchVelocity *= -1;
 					body.punchingState = PunchingState::PunchingBack;
 				}
-
-				SendPunchRpc(events, entity, body);
 			}
 			break;
 			case PunchingState::PunchingBack:
@@ -219,13 +176,13 @@ void PunchSystem::update(entityx::EntityManager& entities, entityx::EventManager
 
 				if (body.punchVelocity < -startVelocity)
 				{
-					float2 dir = sub(body.relativeTargetPos, currentHand.pose.get2());
-					float2 move = norm(dir) * body.punchVelocity;
+					auto dir = body.relativeTargetPos - currentHand.pos;
+					auto move = norm(dir) * body.punchVelocity;
 					AddSubPos(currentHand.entity, move);
 				}
 				else
 				{
-					EndPunch(events, entity, body);
+					EndPunch(entity, body);
 					ChangePunchHand(body);
 
 					if (body.punchTrigger)

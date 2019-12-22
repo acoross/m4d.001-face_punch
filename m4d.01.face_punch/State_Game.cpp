@@ -10,10 +10,12 @@
 #include "C_Position.h"
 #include "C_Drawable.h"
 #include "Components/Velocity.h"
+#include "Components/Body.h"
 //
 #include "S_Renderer.h"
 #include "Systems/MovementSystem.h"
 #include "Systems/SubMovementSystem.h"
+#include "Systems/PunchSystem.h"
 //
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -28,12 +30,13 @@ void State_Game::OnCreate(){
 	sf::Vector2u size = m_stateMgr->GetContext()->m_wind->GetWindowSize();
 	m_view.setSize(size.x, size.y);
 	m_view.setCenter(size.x / 2, size.y / 2);
-	//m_view.zoom(0.6f);
+	m_view.zoom(0.6f);
 	m_stateMgr->GetContext()->m_wind->GetRenderWindow()->setView(m_view);
 	
 	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
 	evMgr->AddCallback(StateType::Game,"Key_Escape",&State_Game::MainMenu,this);
 	evMgr->AddCallback(StateType::Game, "Key_O", &State_Game::ToggleOverlay, this);
+	evMgr->AddCallback(StateType::Game, "Mouse_Left", &State_Game::Punch, this);
 
 	m_gameContext.entityLoader = &m_entityLoader;
 	m_gameContext.entityManager = &m_entityX.entities;
@@ -44,6 +47,7 @@ void State_Game::OnCreate(){
 	auto renderer = m_entityX.systems.add<S_Renderer>(&m_gameContext);
 	auto movement = m_entityX.systems.add<MovementSystem>(&m_gameContext);
 	auto subMovement = m_entityX.systems.add<SubMovementSystem>(&m_gameContext);
+	auto punchSystem = m_entityX.systems.add<PunchSystem>(&m_gameContext);
 
 	m_entityX.systems.configure();
 
@@ -62,6 +66,8 @@ void State_Game::OnCreate(){
 		drawable->SetColor(sf::Color::White);
 
 		auto velocity = player.assign<Velocity>();
+		auto body = player.assign<Body>();
+		body->radius = 10;
 
 		const float handDist = 15.f;
 
@@ -77,6 +83,9 @@ void State_Game::OnCreate(){
 			auto rSubPose = rightHand.assign<C_SubPos>();
 			rSubPose->parent = player;
 			rSubPose->SetRelative(sf::Vector2f(std::cosf(M_PI / 3) * handDist, std::sinf(M_PI / 3) * handDist));
+
+			body->rightHand.entity = rightHand;
+			body->rightHand.pos = rSubPose->GetRelative();
 		}
 
 		{
@@ -91,6 +100,9 @@ void State_Game::OnCreate(){
 			auto lSubPose = leftHand.assign<C_SubPos>();
 			lSubPose->parent = player;
 			lSubPose->SetRelative(sf::Vector2f(std::cosf(-M_PI / 3) * handDist, std::sinf(-M_PI / 3) * handDist));
+
+			body->leftHand.entity = leftHand;
+			body->leftHand.pos = lSubPose->GetRelative();
 		}
 
 		m_player = player;
@@ -183,10 +195,7 @@ void State_Game::UpdateVelocity()
 	SharedContext* context = m_stateMgr->GetContext();
 	auto window = context->m_wind->GetRenderWindow();
 	const auto mousePosition = sf::Mouse::getPosition(*window);
-	const auto viewCenter = m_view.getCenter();
-	const auto viewSize = m_view.getSize();
-	
-	const auto mouseWorldPosition = sf::Vector2f(mousePosition) + viewCenter - sf::Vector2f(viewSize) / 2.f;
+	const auto mouseWorldPosition = window->mapPixelToCoords(mousePosition);
 
 	const auto pos = m_player.component<C_Position>()->GetPosition();
 	const auto angle = m_player.component<C_Position>()->GetAngle();
@@ -198,19 +207,6 @@ void State_Game::UpdateVelocity()
 	
 	sf::Vector3f v;
 	v.z = ::angle(delta);
-
-	/*if (mag > lowerLimit + epsilon)
-	{
-		auto normalized = delta / mag;
-		auto vel = normalized * 300.f;
-		v.x = vel.x;
-		v.y = vel.y;
-	}
-	else
-	{
-		v.x = 0;
-		v.y = 0;
-	}*/
 	
 	float netMag = mag - lowerLimit;
 	if (mag > maxMag + epsilon)
@@ -267,6 +263,14 @@ void State_Game::MainMenu(EventDetails* l_details){
 
 void State_Game::Pause(EventDetails* l_details){
 	m_stateMgr->SwitchTo(StateType::Paused);
+}
+
+void State_Game::Punch(EventDetails* l_details)
+{
+	if (auto body = m_player.component<Body>())
+	{
+		body->punchTrigger = true;
+	}
 }
 
 void State_Game::Activate(){}

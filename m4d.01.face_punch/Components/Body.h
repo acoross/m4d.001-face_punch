@@ -1,13 +1,8 @@
 #pragma once
 
-#include "entityx/Entity.h"
+#include <entityx/Entity.h>
 #include <SFML/System.hpp>
-//#include "Meta.h"
-#include "PoseComponent.h"
-
-struct ExpComponent
-{
-};
+#include "../C_Position.h"
 
 struct HandBinding
 {
@@ -16,7 +11,6 @@ struct HandBinding
 	{}
 
 	sf::Vector2f pos;
-	//float2 movingPos;
 	entityx::Entity entity;
 };
 
@@ -32,26 +26,6 @@ enum class HandType : char
 	None,
 	Left,
 	Right
-};
-
-struct PunchRpc
-{
-	const static bool ServerRpc = false;
-	const static bool Reliable = true;
-
-	entityx::Entity entity;
-	HandType hand;
-	PunchingState punchingState;  //
-	float punchingTimeElapsed;  //
-	float2 relativeTargetPos; //
-	float punchVelocity;  //
-
-	template <class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(entity, hand, punchingState, punchingTimeElapsed,
-			relativeTargetPos.x, relativeTargetPos.y, punchVelocity);
-	}
 };
 
 // comp
@@ -89,17 +63,17 @@ struct Body
 	bool punchTrigger = false;
 	PunchingState punchingState = PunchingState::NotPunching;  //
 	float punchingTimeElapsed = 0.f;  //
-	float2 relativeTargetPos; //
+	sf::Vector2f relativeTargetPos; //
 	float punchVelocity = 0.f;  //
 
 	bool myPunchHit = false;
 
-	//
-	int health = 0;
-	entityx::Entity healthBar;
+	////
+	//int health = 0;
+	//entityx::Entity healthBar;
 
-	// for debug
-	entityx::Entity targetPointEntity;
+	//// for debug
+	//entityx::Entity targetPointEntity;
 
 	bool dead = false;
 

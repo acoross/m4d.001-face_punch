@@ -1,10 +1,11 @@
 #pragma once
-#include "entityx/System.h"
+#include "../GameSystem.h"
+#include "../GameContext.h"
 
-class PunchSystem : public entityx::System<PunchSystem>
+class PunchSystem : public GameSystem<PunchSystem>
 {
 public:
-	PunchSystem();
+	PunchSystem(GameContext* gameContext);
 	~PunchSystem();
 
 	void update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt) override;
