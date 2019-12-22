@@ -38,7 +38,12 @@ public:
 		circle.setPosition(l_vec);
 	}
 
-	const sf::FloatRect GetGlobalBound()
+	float GetRadius() const
+	{
+		return circle.getRadius();
+	}
+
+	const sf::FloatRect GetGlobalBound() const
 	{
 		return circle.getGlobalBounds();
 	}

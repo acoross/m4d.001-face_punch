@@ -20,6 +20,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position);
+
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager), m_gameContext{0,}
 {}
@@ -56,56 +58,13 @@ void State_Game::OnCreate(){
 		<< ", " << viewSpace.width << ", " << viewSpace.height << std::endl;
 
 	{
-		auto player = m_entityX.entities.create();
-		auto position = player.assign<C_Position>();
-		position->SetElevation(0);
-		position->SetPosition(viewSpace.left + viewSpace.width/2, viewSpace.top + viewSpace.height/2);
+		m_player = CreateCharacter(
+			m_entityX.entities, 
+			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2));
 
-		auto drawable = player.assign<C_Drawable>();
-		drawable->SetSize(10);
-		drawable->SetColor(sf::Color::White);
-
-		auto velocity = player.assign<Velocity>();
-		auto body = player.assign<Body>();
-		body->radius = 10;
-
-		const float handDist = 15.f;
-
-		{
-			auto rightHand = m_entityX.entities.create();
-			auto rDrawable = rightHand.assign<C_Drawable>();
-			rDrawable->SetSize(5);
-			rDrawable->SetColor(sf::Color::White);
-
-			auto rPos = rightHand.assign<C_Position>();
-			rPos->SetElevation(0);
-			
-			auto rSubPose = rightHand.assign<C_SubPos>();
-			rSubPose->parent = player;
-			rSubPose->SetRelative(sf::Vector2f(std::cosf(M_PI / 3) * handDist, std::sinf(M_PI / 3) * handDist));
-
-			body->rightHand.entity = rightHand;
-			body->rightHand.pos = rSubPose->GetRelative();
-		}
-
-		{
-			auto leftHand = m_entityX.entities.create();
-			auto lDrawable = leftHand.assign<C_Drawable>();
-			lDrawable->SetSize(5);
-			lDrawable->SetColor(sf::Color::White);
-
-			auto lPos = leftHand.assign<C_Position>();
-			lPos->SetElevation(0);
-
-			auto lSubPose = leftHand.assign<C_SubPos>();
-			lSubPose->parent = player;
-			lSubPose->SetRelative(sf::Vector2f(std::cosf(-M_PI / 3) * handDist, std::sinf(-M_PI / 3) * handDist));
-
-			body->leftHand.entity = leftHand;
-			body->leftHand.pos = lSubPose->GetRelative();
-		}
-
-		m_player = player;
+		auto npc = CreateCharacter(
+			m_entityX.entities,
+			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2));
 	}
 
 	//m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
@@ -279,4 +238,59 @@ void State_Game::Deactivate(){}
 
 void State_Game::ToggleOverlay(EventDetails* l_details){
 	m_stateMgr->GetContext()->m_debugOverlay.SetDebug(!m_stateMgr->GetContext()->m_debugOverlay.Debug());
+}
+
+entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position)
+{
+	auto character = entities.create();
+	auto positionComp = character.assign<C_Position>();
+	positionComp->SetElevation(0);
+	positionComp->SetPosition(position);
+
+	auto drawable = character.assign<C_Drawable>();
+	drawable->SetSize(10);
+	drawable->SetColor(sf::Color::White);
+
+	auto velocity = character.assign<Velocity>();
+	auto body = character.assign<Body>();
+	body->radius = 10;
+	body->health = 200;
+
+	const float handDist = 15.f;
+
+	{
+		auto rightHand = entities.create();
+		auto rDrawable = rightHand.assign<C_Drawable>();
+		rDrawable->SetSize(5);
+		rDrawable->SetColor(sf::Color::White);
+
+		auto rPos = rightHand.assign<C_Position>();
+		rPos->SetElevation(0);
+
+		auto rSubPose = rightHand.assign<C_SubPos>();
+		rSubPose->parent = character;
+		rSubPose->SetRelative(sf::Vector2f(std::cosf(M_PI / 3) * handDist, std::sinf(M_PI / 3) * handDist));
+
+		body->rightHand.entity = rightHand;
+		body->rightHand.pos = rSubPose->GetRelative();
+	}
+
+	{
+		auto leftHand = entities.create();
+		auto lDrawable = leftHand.assign<C_Drawable>();
+		lDrawable->SetSize(5);
+		lDrawable->SetColor(sf::Color::White);
+
+		auto lPos = leftHand.assign<C_Position>();
+		lPos->SetElevation(0);
+
+		auto lSubPose = leftHand.assign<C_SubPos>();
+		lSubPose->parent = character;
+		lSubPose->SetRelative(sf::Vector2f(std::cosf(-M_PI / 3) * handDist, std::sinf(-M_PI / 3) * handDist));
+
+		body->leftHand.entity = leftHand;
+		body->leftHand.pos = lSubPose->GetRelative();
+	}
+
+	return character;
 }

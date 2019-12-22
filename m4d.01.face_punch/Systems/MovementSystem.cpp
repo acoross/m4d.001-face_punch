@@ -1,23 +1,23 @@
 #include "MovementSystem.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <random>
 #include <SFML/System.hpp>
 #include "../Components/Velocity.h"
 #include "../C_Position.h"
-//#include "../Components/Body.h"
+#include "../Components/Body.h"
+#include "../C_Drawable.h"
+
+#include "../Geometry.h"
+
 //#include "../Components/Renderable.h"
 //#include "../Components/PoseComponent.h"
 //#include "../Components/SkillComponent.h"
 //#include "../Components/SpeedUpComponent.h"
 //#include "../Components/Collider.h"
 //#include "../Components/Yummy.h"
-
-inline float dist(const sf::Vector2f& p1, const sf::Vector2f& p2)
-{
-	const float dx = p1.x - p2.x;
-	const float dy = p1.y - p2.y;
-	return std::sqrtf(dx * dx + dy * dy);
-}
 
 const int MaxLevel = 5;
 const int LevelUpTable[MaxLevel - 1]
@@ -46,29 +46,28 @@ void MovementSystem::update(entityx::EntityManager& es, entityx::EventManager& e
 		});
 
 	//ProcessYummyCollisions(es, events);
-	//ProcessPunchCollisions(es);
-	//ResolveOverlap(es);
+	ProcessPunchCollisions(es);
+	ResolveOverlap(es);
 
-	//std::random_device rand;
-	//std::mt19937 gen(rand());
-	//const std::uniform_real_distribution<> moveDist(-10.f, 10.f);
+	std::random_device rand;
+	std::mt19937 gen(rand());
+	const std::uniform_real_distribution<> moveDist(-10.f, 10.f);
 
-	//// process dying
-	//es.each<DyingBody, PoseComponent, Renderable>(
-	//	[&](entityx::Entity entity, DyingBody& body, PoseComponent& pose, Renderable& renderable)
-	//	{
-	//		body.elapsed += dt;
+	// process dying
+	es.each<DyingBody, C_Position, C_Drawable>(
+		[&](entityx::Entity entity, DyingBody& body, C_Position& pose, C_Drawable& renderable)
+		{
+			body.elapsed += dt;
 
-	//		pose.x += moveDist(gen);
-	//		pose.y += moveDist(gen);
+			pose.MoveBy(moveDist(gen), moveDist(gen));
 
-	//		renderable.circle.setRadius(renderable.circle.getRadius() * 0.8f);
+			renderable.SetSize(renderable.GetRadius() * 0.8f);
 
-	//		if (body.elapsed > 0.5f)
-	//		{
-	//			entity.destroy();
-	//		}
-	//	});
+			if (body.elapsed > 0.5f)
+			{
+				entity.destroy();
+			}
+		});
 
 	//const sf::Vector2f halfMapSize = gGame.level_->mapSize / 2.f;
 
@@ -171,186 +170,184 @@ void MovementSystem::Move(entityx::Entity entity, C_Position& pose, const Veloci
 //		}
 //	}
 //}
-//
-//static void SizeUpHand(float bodySize, HandBinding& binding, bool left)
-//{
-//	if (binding.entity)
-//	{
-//		binding.entity.component<Renderable>()->circle.setRadius(bodySize);
-//
-//		const float dist = bodySize * 1.5f;
-//
-//		if (left)
-//		{
-//			binding.pos = sf::Vector2f(std::cosf(-M_PI / 3) * dist, std::sinf(-M_PI / 3) * dist);
-//		}
-//		else
-//		{
-//			binding.pos = sf::Vector2f(std::cosf(M_PI / 3) * dist, std::sinf(M_PI / 3) * dist);
-//		}
-//	}
-//}
-//
-//static void SizeUpBody(entityx::Entity entity)
-//{
-//	auto body = entity.component<Body>();
-//	body->radius += 5;
-//
-//	if (auto render = entity.component<Renderable>())
-//	{
-//		render->circle.setRadius(render->circle.getRadius() + 10);
-//	}
-//
-//	SizeUpHand(body->radius, body->leftHand, true);
-//	SizeUpHand(body->radius, body->rightHand, false);
-//}
-//
-//void MovementSystem::ProcessPunchCollisions(entityx::EntityManager& es)
-//{
-//	auto bodies = es.entities_with_components<PoseComponent, Body>();
-//	auto punches = es.entities_with_components<PoseComponent, PunchCollider>();
-//
-//	for (auto bodyEntity : bodies)
-//	{
-//		auto body = bodyEntity.component<Body>();
-//		auto bodyPose = bodyEntity.component<PoseComponent>();
-//		if (body->dead)
-//		{
-//			continue;
-//		}
-//
-//		for (auto punchEntity : punches)
-//		{
-//			auto punch = punchEntity.component<PunchCollider>();
-//			if (bodyEntity == punch->bodyEntity)
-//			{
-//				continue;
-//			}
-//
-//			if (body->dead)
-//			{
-//				continue;
-//			}
-//
-//			auto punchPose = punchEntity.component<PoseComponent>();
-//
-//			float dist = ::dist(bodyPose->GetPosition(), punchPose->GetPosition());
-//			float collisionDist = punch->radius + body->radius;
-//
-//			if (dist < collisionDist)
-//			{
-//				if (punch->contains(bodyEntity.id().id()))
-//				{
-//					continue;
-//				}
-//
-//				punch->add(bodyEntity.id().id());
-//
-//				// collision!!
-//				float2 punchingEntityPos = punch->bodyEntity.component<PoseComponent>()->GetPosition();
-//				float2 punchPos = punchPose->GetPosition();
-//				float2 punchDir = norm(sub(punchPos, punchingEntityPos));
-//
-//				float2 knockback = punchDir * 10.f;
-//				bodyPose->x += knockback.x;
-//				bodyPose->y += knockback.y;
-//
-//				auto attackerBody = punch->bodyEntity.component<Body>();
-//				attackerBody->myPunchHit = true;
-//
-//				body->health -= 100;
-//
-//				if (body->health <= 0)
-//				{
-//					attackerBody->exp += body->level;
-//
-//					for (;;)
-//					{
-//						if (attackerBody->level < MaxLevel)
-//						{
-//							if (attackerBody->exp >= LevelUpTable[attackerBody->level - 1])
-//							{
-//								++attackerBody->level;
-//								attackerBody->exp -= LevelUpTable[attackerBody->level - 1];
-//
-//								SizeUpBody(punch->bodyEntity);
-//							}
-//							else
-//							{
-//								break;
-//							}
-//						}
-//						else
-//						{
-//							break;
-//						}
-//					}
-//
-//					body->dead = true;
-//					//body->healthBar.component<Renderable>()->width = 0;
-//
-//					if (body->currentPunchHand())
-//					{
-//						if (body->currentPunchHand()->entity.has_component<PunchCollider>())
-//						{
-//							body->currentPunchHand()->entity.remove<PunchCollider>();
-//						}
-//					}
-//
-//					//body->healthBar.destroy();
-//					if (body->targetPointEntity.valid())
-//					{
-//						body->targetPointEntity.destroy();
-//					}
-//
-//					body->leftHand.entity.assign<DyingBody>();
-//					body->rightHand.entity.assign<DyingBody>();
-//
-//					bodyEntity.assign<DyingBody>();
-//					bodyEntity.remove<Body>();
-//				}
-//				else
-//				{
-//					int health = body->health;
-//					//body->healthBar.component<Renderable>()->width = health / 2;
-//				}
-//			}
-//		}
-//	}
-//}
-//
-//void MovementSystem::ResolveOverlap(entityx::EntityManager& es)
-//{
-//	auto comps = es.entities_with_components<PoseComponent, Body>();
-//	for (auto iter = comps.begin(); iter != comps.end(); ++iter)
-//	{
-//		auto e1 = *iter;
-//		auto p1 = e1.component<PoseComponent>();
-//		auto b1 = e1.component<Body>();
-//
-//		for (auto iter2 = iter; iter2 != comps.end(); ++iter2)
-//		{
-//			auto e2 = *iter2;
-//			if (e1 == e2)
-//			{
-//				continue;
-//			}
-//
-//			auto p2 = e2.component<PoseComponent>();
-//			auto b2 = e2.component<Body>();
-//
-//			float2 delta = p1->GetPosition() - p2->GetPosition();;
-//			float d = magnitude(delta);
-//
-//			if (b1->radius + b2->radius > d)
-//			{
-//				// collide!
-//				float overlap = b1->radius + b2->radius - d;
-//				float2 feedback = delta * (overlap / d / 2);
-//
-//				p1->GetPosRef() += feedback;
-//				p2->GetPosRef() -= feedback;
-//			}
-//		}
-//	}
-//}
+
+static void SizeUpHand(float bodySize, HandBinding& binding, bool left)
+{
+	if (binding.entity)
+	{
+		binding.entity.component<C_Drawable>()->SetSize(bodySize);
+
+		const float dist = bodySize * 1.5f;
+
+		if (left)
+		{
+			binding.pos = sf::Vector2f(std::cosf(-M_PI / 3) * dist, std::sinf(-M_PI / 3) * dist);
+		}
+		else
+		{
+			binding.pos = sf::Vector2f(std::cosf(M_PI / 3) * dist, std::sinf(M_PI / 3) * dist);
+		}
+	}
+}
+
+static void SizeUpBody(entityx::Entity entity)
+{
+	auto body = entity.component<Body>();
+	body->radius += 5;
+
+	if (auto render = entity.component<C_Drawable>())
+	{
+		render->SetSize(body->radius);
+	}
+
+	SizeUpHand(body->radius, body->leftHand, true);
+	SizeUpHand(body->radius, body->rightHand, false);
+}
+
+void MovementSystem::ProcessPunchCollisions(entityx::EntityManager& es)
+{
+	auto bodies = es.entities_with_components<C_Position, Body>();
+	auto punches = es.entities_with_components<C_Position, PunchCollider>();
+
+	for (auto bodyEntity : bodies)
+	{
+		auto body = bodyEntity.component<Body>();
+		auto bodyPose = bodyEntity.component<C_Position>();
+		if (body->dead)
+		{
+			continue;
+		}
+
+		for (auto punchEntity : punches)
+		{
+			auto punch = punchEntity.component<PunchCollider>();
+			if (bodyEntity == punch->bodyEntity)
+			{
+				continue;
+			}
+
+			if (body->dead)
+			{
+				continue;
+			}
+
+			auto punchPose = punchEntity.component<C_Position>();
+
+			float dist = ::dist(bodyPose->GetPosition(), punchPose->GetPosition());
+			float collisionDist = punch->radius + body->radius;
+
+			if (dist < collisionDist)
+			{
+				if (punch->contains(bodyEntity.id().id()))
+				{
+					continue;
+				}
+
+				punch->add(bodyEntity.id().id());
+
+				// collision!!
+				auto punchingEntityPos = punch->bodyEntity.component<C_Position>()->GetPosition();
+				auto punchPos = punchPose->GetPosition();
+				auto punchDir = norm(punchPos - punchingEntityPos);
+
+				auto knockback = punchDir * 10.f;
+				bodyPose->MoveBy(knockback);
+
+				auto attackerBody = punch->bodyEntity.component<Body>();
+				attackerBody->myPunchHit = true;
+
+				body->health -= 100;
+
+				if (body->health <= 0)
+				{
+					attackerBody->exp += body->level;
+
+					for (;;)
+					{
+						if (attackerBody->level < MaxLevel)
+						{
+							if (attackerBody->exp >= LevelUpTable[attackerBody->level - 1])
+							{
+								++attackerBody->level;
+								attackerBody->exp -= LevelUpTable[attackerBody->level - 1];
+
+								SizeUpBody(punch->bodyEntity);
+							}
+							else
+							{
+								break;
+							}
+						}
+						else
+						{
+							break;
+						}
+					}
+
+					body->dead = true;
+					//body->healthBar.component<Renderable>()->width = 0;
+
+					if (body->currentPunchHand())
+					{
+						if (body->currentPunchHand()->entity.has_component<PunchCollider>())
+						{
+							body->currentPunchHand()->entity.remove<PunchCollider>();
+						}
+					}
+
+					//body->healthBar.destroy();
+					/*if (body->targetPointEntity.valid())
+					{
+						body->targetPointEntity.destroy();
+					}*/
+
+					body->leftHand.entity.assign<DyingBody>();
+					body->rightHand.entity.assign<DyingBody>();
+
+					bodyEntity.assign<DyingBody>();
+					bodyEntity.remove<Body>();
+				}
+				else
+				{
+					int health = body->health;
+					//body->healthBar.component<Renderable>()->width = health / 2;
+				}
+			}
+		}
+	}
+}
+
+void MovementSystem::ResolveOverlap(entityx::EntityManager& es)
+{
+	auto comps = es.entities_with_components<C_Position, Body>();
+	for (auto iter = comps.begin(); iter != comps.end(); ++iter)
+	{
+		auto e1 = *iter;
+		auto p1 = e1.component<C_Position>();
+		auto b1 = e1.component<Body>();
+
+		for (auto iter2 = iter; iter2 != comps.end(); ++iter2)
+		{
+			auto e2 = *iter2;
+			if (e1 == e2)
+			{
+				continue;
+			}
+
+			auto p2 = e2.component<C_Position>();
+			auto b2 = e2.component<Body>();
+
+			auto delta = p1->GetPosition() - p2->GetPosition();;
+			float d = length(delta);
+			if (b1->radius + b2->radius > d)
+			{
+				// collide!
+				float overlap = b1->radius + b2->radius - d;
+				auto feedback = norm(delta) * overlap / 2.f;
+
+				p1->MoveBy(feedback);
+				p2->MoveBy(-feedback);
+			}
+		}
+	}
+}

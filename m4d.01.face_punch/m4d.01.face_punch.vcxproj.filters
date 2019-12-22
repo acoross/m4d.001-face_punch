@@ -65,6 +65,7 @@
     <ClInclude Include="Systems\PunchSystem.h">
       <Filter>GameState\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Geometry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

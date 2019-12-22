@@ -5,6 +5,7 @@
 #include "../C_Position.h"
 #include "../Components/Velocity.h"
 #include "../C_Drawable.h"
+#include "../Geometry.h"
 
 using namespace entityx;
 
@@ -23,27 +24,6 @@ PunchSystem::~PunchSystem()
 {
 }
 
-static float length(sf::Vector2f vec)
-{
-	return std::sqrt(vec.x * vec.x + vec.y + vec.y);
-}
-
-static float dist(sf::Vector2f vec1, sf::Vector2f vec2)
-{
-	return length(vec1 - vec2);
-}
-
-static sf::Vector2f norm(sf::Vector2f vec)
-{
-	float len = length(vec);
-	if (len > std::numeric_limits<float>::epsilon())
-	{
-		return vec / len;
-	}
-
-	return vec;
-}
-
 static void StartPunch(
 	entityx::EntityManager& entities, entityx::EventManager& events, Entity entity, Body& body, C_Position& pose)
 {
@@ -52,9 +32,9 @@ static void StartPunch(
 	body.punchingTimeElapsed = 0;
 	body.relativeTargetPos = sf::Vector2f(1, 0) * (body.radius * 4);
 
-	/*auto punchRenderable = body.currentPunchHand()->entity.component<C_Drawable>();
-	float punchRad = punchRenderable->width * 0.5f;
-	body.currentPunchHand()->entity.assign<PunchCollider>(entity, punchRad);*/
+	auto punchRenderable = body.currentPunchHand()->entity.component<C_Drawable>();
+	float punchRad = punchRenderable->GetRadius();
+	body.currentPunchHand()->entity.assign<PunchCollider>(entity, punchRad);
 
 	/*sf::Transform t;
 	t.rotate(pose.GetAngle());
@@ -122,7 +102,7 @@ static void EndPunch(Entity entity, Body& body)
 	body.punchingState = PunchingState::NotPunching;
 	body.punchVelocity = 0;
 	SetSubPos(body.currentPunchHand()->entity, body.currentPunchHand()->pos);
-	//body.currentPunchHand()->entity.remove<PunchCollider>();
+	body.currentPunchHand()->entity.remove<PunchCollider>();
 
 	//body.targetPointEntity.destroy();
 	body.myPunchHit = false;

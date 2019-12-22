@@ -18,6 +18,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameContext.h" />
     <ClInclude Include="GameSystem.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="State_Game.h" />
     <ClInclude Include="State_GameOver.h" />
     <ClInclude Include="State_Intro.h" />

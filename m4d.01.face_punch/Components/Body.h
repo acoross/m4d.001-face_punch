@@ -69,7 +69,7 @@ struct Body
 	bool myPunchHit = false;
 
 	////
-	//int health = 0;
+	int health = 0;
 	//entityx::Entity healthBar;
 
 	//// for debug
