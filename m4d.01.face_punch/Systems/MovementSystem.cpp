@@ -69,30 +69,32 @@ void MovementSystem::update(entityx::EntityManager& es, entityx::EventManager& e
 			}
 		});
 
-	//const sf::Vector2f halfMapSize = gGame.level_->mapSize / 2.f;
+	// boundary
+	const sf::Vector2i halfMapSize = gameContext_->mapSize / 2;
+	es.each<C_Position, Body>(
+		[halfMapSize](entityx::Entity entity, C_Position& pose, Body& body)
+		{
+			auto pos = pose.GetPosition();
+			if (pos.x < -halfMapSize.x)
+			{
+				pos.x = -halfMapSize.x;
+			}
+			else if (pos.x > halfMapSize.x)
+			{
+				pos.x = halfMapSize.x;
+			}
 
-	//// boundary
-	//es.each<PoseComponent, Body>(
-	//	[halfMapSize](entityx::Entity entity, PoseComponent& pose, Body& body)
-	//	{
-	//		if (pose.x < -halfMapSize.x)
-	//		{
-	//			pose.x = -halfMapSize.x;
-	//		}
-	//		else if (pose.x > halfMapSize.x)
-	//		{
-	//			pose.x = halfMapSize.x;
-	//		}
+			if (pos.y < -halfMapSize.y)
+			{
+				pos.y = -halfMapSize.y;
+			}
+			else if (pos.y > halfMapSize.y)
+			{
+				pos.y = halfMapSize.y;
+			}
 
-	//		if (pose.y < -halfMapSize.y)
-	//		{
-	//			pose.y = -halfMapSize.y;
-	//		}
-	//		else if (pose.y > halfMapSize.y)
-	//		{
-	//			pose.y = halfMapSize.y;
-	//		}
-	//	});
+			pose.SetPosition(pos);
+		});
 }
 
 void MovementSystem::Move(entityx::Entity entity, C_Position& pose, const Velocity& v, float dt)
@@ -109,11 +111,11 @@ void MovementSystem::Move(entityx::Entity entity, C_Position& pose, const Veloci
 		return;
 	}*/
 
-	/*auto body = entity.component<Body>();
+	auto body = entity.component<Body>();
 	if (body && body->punchingState == PunchingState::Punching)
 	{
 		return;
-	}*/
+	}
 
 	if (v.x != 0 || v.y != 0)
 	{
@@ -175,7 +177,7 @@ static void SizeUpHand(float bodySize, HandBinding& binding, bool left)
 {
 	if (binding.entity)
 	{
-		binding.entity.component<C_Drawable>()->SetSize(bodySize);
+		binding.entity.component<C_Drawable>()->SetSize(bodySize / 2);
 
 		const float dist = bodySize * 1.5f;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/System.hpp>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 inline float length(sf::Vector2f vec)
@@ -22,4 +23,9 @@ inline sf::Vector2f norm(sf::Vector2f vec)
 	}
 
 	return vec;
+}
+
+inline float angle(const sf::Vector2f& f)
+{
+	return std::atan2f(f.y, f.x) / M_PI * 180.f;
 }

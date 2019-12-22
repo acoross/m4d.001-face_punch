@@ -10,14 +10,14 @@ namespace Utils{
 	#include <windows.h>
 	#include <Shlwapi.h>
 	inline std::string GetWorkingDirectory(){
-		/*HMODULE hModule = GetModuleHandle(nullptr);
+		HMODULE hModule = GetModuleHandle(nullptr);
 		if(hModule){
 			char path[256];
-			GetModuleFileName(hModule,path,sizeof(path));
-			PathRemoveFileSpec(path);
+			GetModuleFileNameA(hModule,path,sizeof(path));
+			PathRemoveFileSpecA(path);
 			strcat_s(path,"\\");
 			return std::string(path);
-		}*/
+		}
 		return "";
 	}
 	#elif defined RUNNING_LINUX

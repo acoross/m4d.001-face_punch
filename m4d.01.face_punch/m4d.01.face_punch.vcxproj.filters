@@ -68,7 +68,6 @@
     <ClInclude Include="Geometry.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="S_Renderer.cpp">
       <Filter>GameState\Systems</Filter>
@@ -97,5 +96,6 @@
     <ClCompile Include="Systems\PunchSystem.cpp">
       <Filter>GameState\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>

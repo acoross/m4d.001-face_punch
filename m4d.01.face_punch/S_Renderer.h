@@ -5,10 +5,6 @@
 #include <SFML/Graphics.hpp>
 #include <entityx/entityx.h>
 #include "Window.h"
-#include "SharedContext.h"
-#include "EntityEvents.h"
-#include "EntityMessages.h"
-#include "Message.h"
 #include "Directions.h"
 #include "GameSystem.h"
 #include "GameContext.h"

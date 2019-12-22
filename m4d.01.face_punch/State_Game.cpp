@@ -1,10 +1,7 @@
 #include "State_Game.h"
 
+#include <random>
 #include "StateManager.h"
-#include "Message.h"
-#include "EntityEvents.h"
-#include "Directions.h"
-#include "EntityMessages.h"
 
 //
 #include "C_Position.h"
@@ -19,8 +16,9 @@
 //
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "Geometry.h"
 
-entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position);
+entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle);
 
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager), m_gameContext{0,}
@@ -60,11 +58,23 @@ void State_Game::OnCreate(){
 	{
 		m_player = CreateCharacter(
 			m_entityX.entities, 
-			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2));
+			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2),
+			0);
 
-		auto npc = CreateCharacter(
-			m_entityX.entities,
-			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2));
+		std::mt19937 gen(std::time(0));
+		const std::uniform_real_distribution<float> xdist(-m_gameContext.mapSize.x / 2.f, m_gameContext.mapSize.x / 2.f);
+		const std::uniform_real_distribution<float> ydist(-m_gameContext.mapSize.y / 2.f, m_gameContext.mapSize.y / 2.f);
+		const std::uniform_real_distribution<float> radDist(0, 360);
+
+		for (int i = 0; i < 100; ++i)
+		{
+			float x = xdist(gen), y = ydist(gen), angle = radDist(gen);
+			
+			auto npc = CreateCharacter(
+				m_entityX.entities,
+				sf::Vector2f(x, y),
+				angle);
+		}
 	}
 
 	//m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
@@ -103,7 +113,7 @@ void State_Game::UpdateCamera(){
 	}
 
 	auto pos = m_player.component<C_Position>();
-	//m_view.setCenter(pos->GetPosition());
+	m_view.setCenter(pos->GetPosition());
 
 	SharedContext* context = m_stateMgr->GetContext();
 	context->m_wind->GetRenderWindow()->setView(m_view);
@@ -126,16 +136,6 @@ void State_Game::UpdateCamera(){
 		context->m_wind->GetRenderWindow()->setView(m_view);
 	}
 	*/
-}
-
-inline float angle(const sf::Vector2f& f)
-{
-	return std::atan2f(f.y, f.x) / M_PI * 180.f;
-}
-
-inline float magnitude(sf::Vector2f vec)
-{
-	return std::sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
 void State_Game::UpdateVelocity()
@@ -162,7 +162,7 @@ void State_Game::UpdateVelocity()
 	constexpr float epsilon = std::numeric_limits<float>::epsilon();
 
 	auto delta = mouseWorldPosition - pos;
-	float mag = magnitude(delta);
+	float mag = ::length(delta);
 	
 	sf::Vector3f v;
 	v.z = ::angle(delta);
@@ -240,18 +240,21 @@ void State_Game::ToggleOverlay(EventDetails* l_details){
 	m_stateMgr->GetContext()->m_debugOverlay.SetDebug(!m_stateMgr->GetContext()->m_debugOverlay.Debug());
 }
 
-entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position)
+entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle)
 {
 	auto character = entities.create();
 	auto positionComp = character.assign<C_Position>();
 	positionComp->SetElevation(0);
 	positionComp->SetPosition(position);
+	positionComp->SetAngle(angle);
 
 	auto drawable = character.assign<C_Drawable>();
 	drawable->SetSize(10);
 	drawable->SetColor(sf::Color::White);
 
 	auto velocity = character.assign<Velocity>();
+	velocity->angle = angle;
+
 	auto body = character.assign<Body>();
 	body->radius = 10;
 	body->health = 200;
