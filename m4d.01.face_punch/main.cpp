@@ -6,9 +6,12 @@ void main(int argc, void** argv[]){
 	{
 		Game game;
 		while(!game.GetWindow()->IsDone()){
-			game.Update();
-			game.Render();
-			game.LateUpdate();
+			if (game.GetElapsed().asMilliseconds() > 16)
+			{
+				game.Update();
+				game.Render();
+				game.LateUpdate();
+			}
 		}
 	}
 	system("PAUSE");

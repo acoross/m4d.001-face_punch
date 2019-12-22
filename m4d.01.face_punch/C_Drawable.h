@@ -7,24 +7,23 @@ class C_Drawable : public C_Base{
 public:
 	C_Drawable() : C_Base()
 	{
+		float radius = 1;
+		SetSize(radius);
 	}
 
 	virtual ~C_Drawable(){}
 
 	virtual void ReadIn(std::stringstream& l_stream) override
 	{
-		float x, y;
-		l_stream >> x >> y;
-		circle.setRadius(1);
-		circle.setScale(x, y);
+		float radius;
+		l_stream >> radius;
+		circle.setRadius(radius);
 	}
 
-	void SetSize(const sf::Vector2f& size)
+	void SetSize(float radius)
 	{
-		circle.setRadius(1);
-		circle.setScale(size);
-
-		circle.setOrigin(size.x / 2, size.y / 2);
+		circle.setRadius(radius);
+		circle.setOrigin(radius, radius);
 	}
 
 	void SetColor(const sf::Color color)
@@ -34,18 +33,14 @@ public:
 	}
 
 	/// angle: degree
-	void UpdatePosition(const sf::Vector2f& l_vec, const float angle)
+	void UpdatePosition(const sf::Vector2f& l_vec)
 	{
 		circle.setPosition(l_vec);
-		circle.setRotation(angle);
 	}
 
-	const sf::Vector2u& GetSize()
+	const sf::FloatRect GetGlobalBound()
 	{
-		float radius = circle.getRadius();
-		auto scale = circle.getScale();
-
-		return sf::Vector2u(scale * radius);
+		return circle.getGlobalBounds();
 	}
 
 	void Draw(sf::RenderWindow* l_wind)

@@ -2,9 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include "../Components/PoseComponent.h"
+#include "../C_Position.h"
 
-SubMovementSystem::SubMovementSystem()
+SubMovementSystem::SubMovementSystem(GameContext* gameContext)
+	: GameSystem(gameContext)
 {
 }
 
@@ -14,41 +15,24 @@ SubMovementSystem::~SubMovementSystem()
 
 void SubMovementSystem::update(entityx::EntityManager& entities, entityx::EventManager& events, entityx::TimeDelta dt)
 {
-	PoseComponent parentPos;
-	auto pos = parentPos.GetPosition();
-	parentPos.GetYawDegree();
-
-	int noParent = 0;
-	entities.each<PoseComponent, SubPoseComponent>(
-		[&noParent](auto entity, auto& pose, auto& subPose)
+	entities.each<C_Position, C_SubPos>(
+		[](auto entity, C_Position& pos, C_SubPos& subPos)
 		{
-			if (!subPose.parent)
+			if (!subPos.parent)
 			{
-				++noParent;
 				return;
 			}
 
-			auto parentPos = subPose.parent.component<PoseComponent>();
+			auto parentPos = subPos.parent.component<C_Position>();
 			if (!parentPos)
 			{
 				return;
 			}
 
-			auto subPos = subPose.GetPosRef();
-			auto pos = pose.GetPosition();
-			if (subPose.applyRotation)
-			{
-				sf::Transform t;
-				t.rotate(parentPos->GetYawDegree());
-				t.translate(parentPos->GetPosition());
-				
-				pose.GetPosRef() = t.transformPoint(subPos);
-			}
-			else
-			{
-				pose.GetPosRef() = parentPos->GetPosition() + subPos;
-			}
-		});
+			sf::Transform t;
+			t.rotate(parentPos->GetAngle());
 
-	/*gGame.logger.AddDebugInfo("noParent", noParent, 0.9f);*/
+			auto relative = t.transformPoint(subPos.GetRelative()) + parentPos->GetPosition();
+			pos.SetPosition(relative);
+		});
 }

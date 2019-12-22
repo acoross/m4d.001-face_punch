@@ -11,7 +11,7 @@ void S_Renderer::update(entityx::EntityManager& entities, entityx::EventManager&
 {
 	entities.each<C_Position, C_Drawable>([](auto entity, C_Position& position, C_Drawable& drawable)
 		{
-			drawable.UpdatePosition(position.GetPosition(), position.GetAngle());
+			drawable.UpdatePosition(position.GetPosition());
 		});
 }
 
@@ -51,12 +51,7 @@ void S_Renderer::Render(Window* l_wind, unsigned int l_layer)
 		auto drawable = entity.component<C_Drawable>();
 		if (!drawable) { continue; }
 
-		sf::FloatRect drawableBounds;
-		drawableBounds.left = position->GetPosition().x - (drawable->GetSize().x / 2);
-		drawableBounds.top = position->GetPosition().y - drawable->GetSize().y;
-		drawableBounds.width = drawable->GetSize().x;
-		drawableBounds.height = drawable->GetSize().y;
-
+		sf::FloatRect drawableBounds = drawable->GetGlobalBound();
 		if (!l_wind->GetViewSpace().intersects(drawableBounds))
 		{
 			continue; 

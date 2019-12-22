@@ -7,17 +7,16 @@
 struct Velocity
 {
 	Velocity()
-		: x(0), y(0), yaw(0)
+		: x(0), y(0), angle(0)
 	{}
 
-	Velocity(float x, float y, float yaw)
-		: x(x), y(y), yaw(yaw)
+	Velocity(float x, float y, float angle)
+		: x(x), y(y), angle(angle)
 	{}
 
 	float x;
 	float y;
-	float yaw;
-	float lastCmdTime = 0;
+	float angle;
 };
 //
 //namespace meta

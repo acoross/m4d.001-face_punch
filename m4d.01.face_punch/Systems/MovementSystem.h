@@ -1,24 +1,25 @@
 #pragma once
 #include <queue>
 #include "entityx/System.h"
+#include "../GameContext.h"
+#include "../GameSystem.h"
 
-struct MoveRpc;
 struct Velocity;
-struct PoseComponent;
+struct C_Position;
 
 class MovementSystem
-	: public entityx::System<MovementSystem>
+	: public GameSystem<MovementSystem>
 {
 public:
-	MovementSystem();
+	MovementSystem(GameContext* gameContext);
 	~MovementSystem();
 
 	void update(entityx::EntityManager& es, entityx::EventManager& events, entityx::TimeDelta dt) override;
 
 private:
-	void ProcessYummyCollisions(entityx::EntityManager& es, entityx::EventManager& events);
+	/*void ProcessYummyCollisions(entityx::EntityManager& es, entityx::EventManager& events);
 	void ProcessPunchCollisions(entityx::EntityManager& es);
-	void ResolveOverlap(entityx::EntityManager& es);
-	void Move(entityx::Entity entity, PoseComponent& pose, Velocity& v, float dt);
+	void ResolveOverlap(entityx::EntityManager& es);*/
+	void Move(entityx::Entity entity, C_Position& pose, const Velocity& v, float dt);
 };
 

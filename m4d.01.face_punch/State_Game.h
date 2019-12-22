@@ -25,6 +25,7 @@ public:
 	void ToggleOverlay(EventDetails* l_details);
 private:
 	void UpdateCamera();
+	void UpdateVelocity();
 
 	entityx::EntityX m_entityX;
 	EntityLoader m_entityLoader;

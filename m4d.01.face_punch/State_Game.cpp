@@ -9,8 +9,14 @@
 //
 #include "C_Position.h"
 #include "C_Drawable.h"
+#include "Components/Velocity.h"
 //
 #include "S_Renderer.h"
+#include "Systems/MovementSystem.h"
+#include "Systems/SubMovementSystem.h"
+//
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager), m_gameContext{0,}
@@ -22,7 +28,7 @@ void State_Game::OnCreate(){
 	sf::Vector2u size = m_stateMgr->GetContext()->m_wind->GetWindowSize();
 	m_view.setSize(size.x, size.y);
 	m_view.setCenter(size.x / 2, size.y / 2);
-	m_view.zoom(0.6f);
+	//m_view.zoom(0.6f);
 	m_stateMgr->GetContext()->m_wind->GetRenderWindow()->setView(m_view);
 	
 	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
@@ -36,17 +42,59 @@ void State_Game::OnCreate(){
 	m_gameContext.sharedContext = m_stateMgr->GetContext();
 
 	auto renderer = m_entityX.systems.add<S_Renderer>(&m_gameContext);
+	auto movement = m_entityX.systems.add<MovementSystem>(&m_gameContext);
+	auto subMovement = m_entityX.systems.add<SubMovementSystem>(&m_gameContext);
 
 	m_entityX.systems.configure();
 
-	auto player = m_entityX.entities.create();
-	auto position = player.assign<C_Position>();
-	position->SetElevation(0);
-	position->SetPosition(10, 10);
+	auto viewSpace = m_stateMgr->GetContext()->m_wind->GetViewSpace();
+	std::cout << "viewSpace: " << viewSpace.left << ", " << viewSpace.top
+		<< ", " << viewSpace.width << ", " << viewSpace.height << std::endl;
 
-	auto drawable = player.assign<C_Drawable>();
-	drawable->SetSize(sf::Vector2f(10, 10));
-	drawable->SetColor(sf::Color::White);
+	{
+		auto player = m_entityX.entities.create();
+		auto position = player.assign<C_Position>();
+		position->SetElevation(0);
+		position->SetPosition(viewSpace.left + viewSpace.width/2, viewSpace.top + viewSpace.height/2);
+
+		auto drawable = player.assign<C_Drawable>();
+		drawable->SetSize(10);
+		drawable->SetColor(sf::Color::White);
+
+		auto velocity = player.assign<Velocity>();
+
+		const float handDist = 15.f;
+
+		{
+			auto rightHand = m_entityX.entities.create();
+			auto rDrawable = rightHand.assign<C_Drawable>();
+			rDrawable->SetSize(5);
+			rDrawable->SetColor(sf::Color::White);
+
+			auto rPos = rightHand.assign<C_Position>();
+			rPos->SetElevation(0);
+			
+			auto rSubPose = rightHand.assign<C_SubPos>();
+			rSubPose->parent = player;
+			rSubPose->SetRelative(sf::Vector2f(std::cosf(M_PI / 3) * handDist, std::sinf(M_PI / 3) * handDist));
+		}
+
+		{
+			auto leftHand = m_entityX.entities.create();
+			auto lDrawable = leftHand.assign<C_Drawable>();
+			lDrawable->SetSize(5);
+			lDrawable->SetColor(sf::Color::White);
+
+			auto lPos = leftHand.assign<C_Position>();
+			lPos->SetElevation(0);
+
+			auto lSubPose = leftHand.assign<C_SubPos>();
+			lSubPose->parent = player;
+			lSubPose->SetRelative(sf::Vector2f(std::cosf(-M_PI / 3) * handDist, std::sinf(-M_PI / 3) * handDist));
+		}
+
+		m_player = player;
+	}
 
 	//m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
 	//m_gameMap->LoadMap("media/Maps/map1.map");
@@ -71,6 +119,8 @@ void State_Game::OnDestroy(){
 void State_Game::Update(const sf::Time& l_time){
 	SharedContext* context = m_stateMgr->GetContext();
 	UpdateCamera();
+	UpdateVelocity();
+
 	//m_gameMap->Update(l_time.asSeconds());
 	m_entityX.systems.update_all(l_time.asSeconds());
 }
@@ -81,10 +131,10 @@ void State_Game::UpdateCamera(){
 		return; 
 	}
 
-	SharedContext* context = m_stateMgr->GetContext();
-	//auto pos = m_player.component<C_Position>();
-
+	auto pos = m_player.component<C_Position>();
 	//m_view.setCenter(pos->GetPosition());
+
+	SharedContext* context = m_stateMgr->GetContext();
 	context->m_wind->GetRenderWindow()->setView(m_view);
 
 	/*
@@ -105,6 +155,93 @@ void State_Game::UpdateCamera(){
 		context->m_wind->GetRenderWindow()->setView(m_view);
 	}
 	*/
+}
+
+inline float angle(const sf::Vector2f& f)
+{
+	return std::atan2f(f.y, f.x) / M_PI * 180.f;
+}
+
+inline float magnitude(sf::Vector2f vec)
+{
+	return std::sqrt(vec.x * vec.x + vec.y * vec.y);
+}
+
+void State_Game::UpdateVelocity()
+{
+	if (!m_player)
+	{
+		return;
+	}
+
+	const static float maxSpeed = 300;
+	const static float maxMag = 100;
+	const static float SpeedPerMag = maxSpeed / maxMag;
+
+	const static float lowerLimit = 5;
+
+	SharedContext* context = m_stateMgr->GetContext();
+	auto window = context->m_wind->GetRenderWindow();
+	const auto mousePosition = sf::Mouse::getPosition(*window);
+	const auto viewCenter = m_view.getCenter();
+	const auto viewSize = m_view.getSize();
+	
+	const auto mouseWorldPosition = sf::Vector2f(mousePosition) + viewCenter - sf::Vector2f(viewSize) / 2.f;
+
+	const auto pos = m_player.component<C_Position>()->GetPosition();
+	const auto angle = m_player.component<C_Position>()->GetAngle();
+
+	constexpr float epsilon = std::numeric_limits<float>::epsilon();
+
+	auto delta = mouseWorldPosition - pos;
+	float mag = magnitude(delta);
+	
+	sf::Vector3f v;
+	v.z = ::angle(delta);
+
+	/*if (mag > lowerLimit + epsilon)
+	{
+		auto normalized = delta / mag;
+		auto vel = normalized * 300.f;
+		v.x = vel.x;
+		v.y = vel.y;
+	}
+	else
+	{
+		v.x = 0;
+		v.y = 0;
+	}*/
+	
+	float netMag = mag - lowerLimit;
+	if (mag > maxMag + epsilon)
+	{
+		auto newV = delta * (maxSpeed / mag);
+		v.x = newV.x;
+		v.y = newV.y;
+	}
+	else if (mag < lowerLimit)
+	{
+		v.x = 0;
+		v.y = 0;
+
+		if (mag < epsilon)
+		{
+			v.z = angle;
+		}
+	}
+	else
+	{
+		auto newV = delta * (SpeedPerMag * netMag / mag);
+		v.x = newV.x;
+		v.y = newV.y;
+	}
+
+	if (auto vel = m_player.component<Velocity>())
+	{
+		vel->x = v.x;
+		vel->y = v.y;
+		vel->angle = v.z;
+	}
 }
 
 void State_Game::Draw(){

@@ -46,3 +46,22 @@ private:
 	unsigned int m_elevation;
 	float m_angle;
 };
+
+struct C_SubPos
+{
+public:
+	const sf::Vector2f& GetRelative() { return m_relative; }
+
+	void SetRelative(float l_x, float l_y) {
+		m_relative = sf::Vector2f(l_x, l_y);
+	}
+
+	void SetRelative(const sf::Vector2f& l_vec) {
+		m_relative = l_vec;
+	}
+
+	entityx::Entity parent;
+
+private:
+	sf::Vector2f m_relative;
+};
