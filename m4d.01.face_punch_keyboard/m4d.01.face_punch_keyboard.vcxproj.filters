@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GameState">
+      <UniqueIdentifier>{c3fa29bc-3e01-4f34-bc1f-8f685364da1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameState\Components">
+      <UniqueIdentifier>{9a7f4559-510b-43f7-a9a3-4cb3c9f9a65f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameState\Systems">
+      <UniqueIdentifier>{26ce796b-5e92-42d2-9e2a-a3dd9f10b2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OtherStates">
+      <UniqueIdentifier>{15ed5126-4a0d-4b3e-aa7e-96b2b0072e74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="C_Position.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Drawable.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Renderer.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="State_GameOver.h">
+      <Filter>OtherStates</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Intro.h">
+      <Filter>OtherStates</Filter>
+    </ClInclude>
+    <ClInclude Include="State_MainMenu.h">
+      <Filter>OtherStates</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Paused.h">
+      <Filter>OtherStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameContext.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSystem.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="State_Game.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Velocity.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\MovementSystem.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\SubMovementSystem.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Body.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\PunchSystem.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="State_Logo.h">
+      <Filter>OtherStates</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="S_Renderer.cpp">
+      <Filter>GameState\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="State_GameOver.cpp">
+      <Filter>OtherStates</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Intro.cpp">
+      <Filter>OtherStates</Filter>
+    </ClCompile>
+    <ClCompile Include="State_MainMenu.cpp">
+      <Filter>OtherStates</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Paused.cpp">
+      <Filter>OtherStates</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Game.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\MovementSystem.cpp">
+      <Filter>GameState\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\SubMovementSystem.cpp">
+      <Filter>GameState\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\PunchSystem.cpp">
+      <Filter>GameState\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="State_Logo.cpp">
+      <Filter>OtherStates</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

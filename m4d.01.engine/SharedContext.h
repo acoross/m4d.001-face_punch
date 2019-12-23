@@ -1,9 +1,10 @@
 #pragma once
+#include <SFML/Audio.hpp>
+#include <entityx/entityx.h>
 #include "Window.h"
 #include "EventManager.h"
 #include "TextureManager.h"
 #include "DebugOverlay.h"
-#include <entityx/entityx.h>
 #include "EntityLoader.h"
 
 class Map;
@@ -18,4 +19,5 @@ struct SharedContext{
 	EventManager* m_eventManager;
 	TextureManager* m_textureManager;
 	DebugOverlay m_debugOverlay;
+	sf::Music* m_music;
 };

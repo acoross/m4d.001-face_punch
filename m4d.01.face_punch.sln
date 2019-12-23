@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ch.09", "ch.09.ecs\ch.09.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "m4d.01.engine", "m4d.01.engine\m4d.01.engine.vcxproj", "{B4D447D3-0055-4D91-85B6-22B495B30EB4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "m4d.01.face_punch_keyboard", "m4d.01.face_punch_keyboard\m4d.01.face_punch_keyboard.vcxproj", "{4BC3BA74-E323-46FD-B125-8C8742CC8506}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,20 @@ Global
 		{B4D447D3-0055-4D91-85B6-22B495B30EB4}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{B4D447D3-0055-4D91-85B6-22B495B30EB4}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{B4D447D3-0055-4D91-85B6-22B495B30EB4}.RelWithDebInfo|x86.Build.0 = Release|Win32
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Debug|x64.ActiveCfg = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Debug|x64.Build.0 = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Debug|x86.ActiveCfg = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.MinSizeRel|x64.ActiveCfg = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.MinSizeRel|x64.Build.0 = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.MinSizeRel|x86.ActiveCfg = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.MinSizeRel|x86.Build.0 = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Release|x64.ActiveCfg = Release|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Release|x64.Build.0 = Release|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.Release|x86.ActiveCfg = Release|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.RelWithDebInfo|x86.ActiveCfg = Debug|x64
+		{4BC3BA74-E323-46FD-B125-8C8742CC8506}.RelWithDebInfo|x86.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
