@@ -12,9 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Body.h" />
+    <ClInclude Include="Components\C_Drawable.h" />
+    <ClInclude Include="Components\C_Position.h" />
     <ClInclude Include="Components\Velocity.h" />
-    <ClInclude Include="C_Drawable.h" />
-    <ClInclude Include="C_Position.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameContext.h" />
     <ClInclude Include="GameSystem.h" />
@@ -28,7 +28,7 @@
     <ClInclude Include="Systems\MovementSystem.h" />
     <ClInclude Include="Systems\PunchSystem.h" />
     <ClInclude Include="Systems\SubMovementSystem.h" />
-    <ClInclude Include="S_Renderer.h" />
+    <ClInclude Include="Systems\S_Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
@@ -42,7 +42,7 @@
     <ClCompile Include="Systems\MovementSystem.cpp" />
     <ClCompile Include="Systems\PunchSystem.cpp" />
     <ClCompile Include="Systems\SubMovementSystem.cpp" />
-    <ClCompile Include="S_Renderer.cpp" />
+    <ClCompile Include="Systems\S_Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\m4d.01.engine\m4d.01.engine.vcxproj">

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <entityx/System.h>
+//
 #include "GameContext.h"
 
 template <class DerivedT>

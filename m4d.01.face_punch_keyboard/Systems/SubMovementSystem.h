@@ -1,6 +1,7 @@
 #pragma once
 
-#include "entityx/System.h"
+#include <entityx/System.h>
+//
 #include "GameSystem.h"
 #include "GameContext.h"
 

@@ -1,22 +1,19 @@
 #include "State_Game.h"
 
 #include <random>
-#include "StateManager.h"
-
 //
-#include "C_Position.h"
-#include "C_Drawable.h"
+#include "StateManager.h"
+#include "Geometry.h"
+//
+#include "Components/C_Position.h"
+#include "Components/C_Drawable.h"
 #include "Components/Velocity.h"
 #include "Components/Body.h"
 //
-#include "S_Renderer.h"
+#include "Systems/S_Renderer.h"
 #include "Systems/MovementSystem.h"
 #include "Systems/SubMovementSystem.h"
 #include "Systems/PunchSystem.h"
-//
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include "Geometry.h"
 
 entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle);
 

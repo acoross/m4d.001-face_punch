@@ -1,7 +1,6 @@
 #pragma once
 
-#include <cstdint>
-#include "entityx/Entity.h"
+#include <entityx/Entity.h>
 //#include "Meta.h"
 
 struct Velocity

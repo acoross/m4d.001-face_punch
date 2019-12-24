@@ -2,7 +2,7 @@
 
 #include <entityx/Entity.h>
 #include <SFML/System.hpp>
-#include "../C_Position.h"
+#include "Components/C_Position.h"
 
 struct HandBinding
 {

@@ -1,16 +1,15 @@
 #include "MovementSystem.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include <random>
+//
 #include <SFML/System.hpp>
-#include "Components/Velocity.h"
-#include "C_Position.h"
-#include "Components/Body.h"
-#include "C_Drawable.h"
-
+//
 #include "Geometry.h"
+//
+#include "Components/Velocity.h"
+#include "Components/C_Position.h"
+#include "Components/Body.h"
+#include "Components/C_Drawable.h"
 
 //#include "../Components/Renderable.h"
 //#include "../Components/PoseComponent.h"

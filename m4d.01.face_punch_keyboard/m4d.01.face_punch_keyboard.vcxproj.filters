@@ -20,15 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-    <ClInclude Include="C_Position.h">
-      <Filter>GameState\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="C_Drawable.h">
-      <Filter>GameState\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="S_Renderer.h">
-      <Filter>GameState\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="State_GameOver.h">
       <Filter>OtherStates</Filter>
     </ClInclude>
@@ -69,12 +60,18 @@
     <ClInclude Include="State_Logo.h">
       <Filter>OtherStates</Filter>
     </ClInclude>
+    <ClInclude Include="Components\C_Position.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\C_Drawable.h">
+      <Filter>GameState\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\S_Renderer.h">
+      <Filter>GameState\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="S_Renderer.cpp">
-      <Filter>GameState\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="State_GameOver.cpp">
       <Filter>OtherStates</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="State_Logo.cpp">
       <Filter>OtherStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\S_Renderer.cpp">
+      <Filter>GameState\Systems</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #pragma once
 #include <queue>
-#include "entityx/System.h"
+//
+#include <entityx/System.h>
+//
 #include "GameContext.h"
 #include "GameSystem.h"
 

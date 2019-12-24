@@ -1,6 +1,7 @@
 #include "S_Renderer.h"
-#include "C_Position.h"
-#include "C_Drawable.h"
+
+#include "Components/C_Position.h"
+#include "Components/C_Drawable.h"
 
 S_Renderer::S_Renderer(GameContext* gameContext)
 	: GameSystem(gameContext)

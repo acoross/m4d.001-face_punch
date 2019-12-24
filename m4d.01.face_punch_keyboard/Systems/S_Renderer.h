@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <vector>
+//
 #include <SFML/Graphics.hpp>
 #include <entityx/entityx.h>
+//
 #include "Window.h"
 #include "Directions.h"
 #include "GameSystem.h"
