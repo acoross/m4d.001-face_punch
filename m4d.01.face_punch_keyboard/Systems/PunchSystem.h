@@ -1,6 +1,6 @@
 #pragma once
-#include "../GameSystem.h"
-#include "../GameContext.h"
+#include "GameSystem.h"
+#include "GameContext.h"
 
 class PunchSystem : public GameSystem<PunchSystem>
 {

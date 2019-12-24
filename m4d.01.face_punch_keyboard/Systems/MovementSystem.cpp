@@ -5,12 +5,12 @@
 
 #include <random>
 #include <SFML/System.hpp>
-#include "../Components/Velocity.h"
-#include "../C_Position.h"
-#include "../Components/Body.h"
-#include "../C_Drawable.h"
+#include "Components/Velocity.h"
+#include "C_Position.h"
+#include "Components/Body.h"
+#include "C_Drawable.h"
 
-#include "../Geometry.h"
+#include "Geometry.h"
 
 //#include "../Components/Renderable.h"
 //#include "../Components/PoseComponent.h"

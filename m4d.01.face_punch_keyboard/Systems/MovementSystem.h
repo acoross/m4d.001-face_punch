@@ -1,8 +1,8 @@
 #pragma once
 #include <queue>
 #include "entityx/System.h"
-#include "../GameContext.h"
-#include "../GameSystem.h"
+#include "GameContext.h"
+#include "GameSystem.h"
 
 struct Velocity;
 struct C_Position;

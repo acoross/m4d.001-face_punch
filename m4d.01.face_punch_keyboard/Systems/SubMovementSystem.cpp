@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include "../C_Position.h"
+#include "C_Position.h"
 
 SubMovementSystem::SubMovementSystem(GameContext* gameContext)
 	: GameSystem(gameContext)

@@ -1,11 +1,11 @@
 #include "PunchSystem.h"
 
 #include <cmath>
-#include "../Components/Body.h"
-#include "../C_Position.h"
-#include "../Components/Velocity.h"
-#include "../C_Drawable.h"
-#include "../Geometry.h"
+#include "Components/Body.h"
+#include "C_Position.h"
+#include "Components/Velocity.h"
+#include "C_Drawable.h"
+#include "Geometry.h"
 
 using namespace entityx;
 

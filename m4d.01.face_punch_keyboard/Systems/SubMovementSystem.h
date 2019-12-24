@@ -1,8 +1,8 @@
 #pragma once
 
 #include "entityx/System.h"
-#include "../GameSystem.h"
-#include "../GameContext.h"
+#include "GameSystem.h"
+#include "GameContext.h"
 
 class SubMovementSystem : public GameSystem<SubMovementSystem>
 {
