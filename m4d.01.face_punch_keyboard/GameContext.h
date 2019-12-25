@@ -2,7 +2,7 @@
 
 #include <SFML/System.hpp>
 #include <entityx/entityx.h>
-//
+
 #include "EntityLoader.h"
 #include "SharedContext.h"
 

@@ -1,12 +1,15 @@
 #pragma once
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+
 #include <vector>
 #include <unordered_map>
 #include <functional>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+
 #include "Utilities.h"
 
 enum class EventType{

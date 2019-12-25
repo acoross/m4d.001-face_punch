@@ -20,12 +20,12 @@ Game::Game(): m_window("Chapter 8", sf::Vector2u(800,600)),
 	m_stateManager.RegisterState<State_Paused>(StateType::Paused);
 	m_stateManager.RegisterState<State_GameOver>(StateType::GameOver);
 
-	m_context.m_wind = &m_window;
-	m_context.m_eventManager = m_window.GetEventManager();
-	m_context.m_textureManager = &m_textureManager;
+	m_context.wind = &m_window;
+	m_context.eventManager = m_window.GetEventManager();
+	m_context.textureManager = &m_textureManager;
 
 	m_music.openFromFile(::Utils::GetWorkingDirectory() + "media/Music/the_cheetahmen.ogg");
-	m_context.m_music = &m_music;
+	m_context.music = &m_music;
 
 	m_stateManager.SwitchTo(StateType::Logo);
 }
@@ -47,8 +47,8 @@ void Game::Render(){
 	m_stateManager.Draw();
 
 	// Debug.
-	if(m_context.m_debugOverlay.Debug()){
-		m_context.m_debugOverlay.Draw(m_window.GetRenderWindow());
+	if(m_context.debugOverlay.Debug()){
+		m_context.debugOverlay.Draw(m_window.GetRenderWindow());
 	}
 	// End debug.
 

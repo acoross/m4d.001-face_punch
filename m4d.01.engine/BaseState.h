@@ -1,5 +1,7 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
+
 class StateManager;
 
 class BaseState{
@@ -25,6 +27,7 @@ public:
 	bool IsTranscendent()const{ return m_transcendent; }
 	sf::View& GetView(){ return m_view; }
 	StateManager* GetStateManager(){ return m_stateMgr; }
+
 protected:
 	StateManager* m_stateMgr;
 	bool m_transparent;

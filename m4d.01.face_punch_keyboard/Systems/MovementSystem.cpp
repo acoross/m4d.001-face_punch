@@ -1,21 +1,15 @@
 #include "MovementSystem.h"
 
 #include <random>
-//
+
 #include <SFML/System.hpp>
-//
+
 #include "Geometry.h"
-//
-#include "Components/Velocity.h"
-#include "Components/C_Position.h"
 #include "Components/Body.h"
 #include "Components/C_Drawable.h"
 
-//#include "../Components/Renderable.h"
-//#include "../Components/PoseComponent.h"
 //#include "../Components/SkillComponent.h"
 //#include "../Components/SpeedUpComponent.h"
-//#include "../Components/Collider.h"
 //#include "../Components/Yummy.h"
 
 const int MaxLevel = 5;

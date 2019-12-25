@@ -1,7 +1,9 @@
-#include <entityx/entityx.h>
-#include "Game.h"
-#include <SFML/Network/Packet.hpp>
 #include <strstream>
+
+#include <SFML/Network/Packet.hpp>
+#include <entityx/entityx.h>
+
+#include "Game.h"
 
 class Foo
 {

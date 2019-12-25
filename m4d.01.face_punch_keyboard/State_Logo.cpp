@@ -9,9 +9,9 @@ State_Logo::~State_Logo() {}
 void State_Logo::OnCreate() {
 	m_timePassed = 0.0f;
 
-	sf::Vector2u windowSize = m_stateMgr->GetContext()->m_wind->GetRenderWindow()->getSize();
+	sf::Vector2u windowSize = m_stateMgr->GetContext()->wind->GetRenderWindow()->getSize();
 
-	TextureManager* textureMgr = m_stateMgr->GetContext()->m_textureManager;
+	TextureManager* textureMgr = m_stateMgr->GetContext()->textureManager;
 	textureMgr->RequireResource("Logo");
 
 	m_logoSprite.setTexture(*textureMgr->GetResource("Logo"));
@@ -29,15 +29,15 @@ void State_Logo::OnCreate() {
 		textRect.top + textRect.height / 2.0f);
 	m_text.setPosition(windowSize.x / 2.0f, windowSize.y * 5 / 6.0f);
 
-	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
+	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
 	evMgr->AddCallback(StateType::Logo, "Intro_Continue", &State_Logo::Continue, this);
 }
 
 void State_Logo::OnDestroy() {
-	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
+	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
 	evMgr->RemoveCallback(StateType::Logo, "Intro_Continue");
 
-	TextureManager* textureMgr = m_stateMgr->GetContext()->m_textureManager;
+	TextureManager* textureMgr = m_stateMgr->GetContext()->textureManager;
 	textureMgr->ReleaseResource("Logo");
 }
 
@@ -51,7 +51,7 @@ void State_Logo::Update(const sf::Time& l_time) {
 }
 
 void State_Logo::Draw() {
-	sf::RenderWindow* window = m_stateMgr->GetContext()->m_wind->GetRenderWindow();
+	sf::RenderWindow* window = m_stateMgr->GetContext()->wind->GetRenderWindow();
 
 	window->draw(m_logoSprite);
 	if (m_timePassed >= 5.0f) {

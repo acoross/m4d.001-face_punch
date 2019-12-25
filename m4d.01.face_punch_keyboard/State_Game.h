@@ -1,6 +1,8 @@
 #pragma once
+
 #include <SFML/System.hpp>
 #include <entityx/entityx.h>
+
 #include "BaseState.h"
 #include "EventManager.h"
 #include "GameContext.h"

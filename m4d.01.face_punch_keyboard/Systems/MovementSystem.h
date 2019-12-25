@@ -1,13 +1,13 @@
 #pragma once
+
 #include <queue>
-//
+
 #include <entityx/System.h>
-//
+
 #include "GameContext.h"
 #include "GameSystem.h"
-
-struct Velocity;
-struct C_Position;
+#include "Components/Velocity.h"
+#include "Components/C_Position.h"
 
 class MovementSystem
 	: public GameSystem<MovementSystem>

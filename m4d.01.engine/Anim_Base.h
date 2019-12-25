@@ -1,8 +1,11 @@
 #pragma once
+
 #include <string>
+
 using Frame = unsigned int;
 
 class SpriteSheet;
+
 class Anim_Base{
 	friend class SpriteSheet;
 public:

@@ -1,4 +1,5 @@
 #include "SpriteSheet.h"
+#include "Anim_Directional.h"
 
 SpriteSheet::SpriteSheet(TextureManager* l_textMgr) 
 	:m_textureManager(l_textMgr), m_animationCurrent(nullptr),

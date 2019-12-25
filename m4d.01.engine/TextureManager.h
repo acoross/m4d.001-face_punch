@@ -1,6 +1,8 @@
 #pragma once
-#include "ResourceManager.h"
+
 #include <SFML/Graphics/Texture.hpp>
+
+#include "ResourceManager.h"
 
 class TextureManager: public ResourceManager<TextureManager, sf::Texture>{
 public:

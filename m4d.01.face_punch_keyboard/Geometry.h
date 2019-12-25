@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+
 #include <SFML/System.hpp>
 
 inline float length(sf::Vector2f vec)

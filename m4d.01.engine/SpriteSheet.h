@@ -1,10 +1,14 @@
 #pragma once
+
+#include <unordered_map>
+
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+
 #include "TextureManager.h"
-#include "Anim_Directional.h"
+#include "Anim_Base.h"
+#include "Directions.h"
 #include "Utilities.h"
-#include <unordered_map>
 
 using Animations = std::unordered_map<std::string,Anim_Base*>;
 
@@ -34,6 +38,7 @@ public:
 
 	void Update(float l_dT);
 	void Draw(sf::RenderWindow* l_wnd);
+
 private:
 	std::string m_texture;
 	sf::Sprite m_sprite;

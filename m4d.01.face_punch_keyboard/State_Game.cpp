@@ -24,13 +24,13 @@ State_Game::State_Game(StateManager* l_stateManager)
 State_Game::~State_Game(){}
 
 void State_Game::OnCreate(){
-	sf::Vector2u size = m_stateMgr->GetContext()->m_wind->GetWindowSize();
+	sf::Vector2u size = m_stateMgr->GetContext()->wind->GetWindowSize();
 	m_view.setSize(size.x, size.y);
 	m_view.setCenter(size.x / 2, size.y / 2);
 	m_view.zoom(0.6f);
-	m_stateMgr->GetContext()->m_wind->GetRenderWindow()->setView(m_view);
+	m_stateMgr->GetContext()->wind->GetRenderWindow()->setView(m_view);
 	
-	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
+	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
 	evMgr->AddCallback(StateType::Game,"Key_Escape",&State_Game::MainMenu,this);
 	evMgr->AddCallback(StateType::Game, "Key_O", &State_Game::ToggleOverlay, this);
 	evMgr->AddCallback(StateType::Game, "Key_Comma", &State_Game::Punch, this);
@@ -53,7 +53,7 @@ void State_Game::OnCreate(){
 
 	m_entityX.systems.configure();
 
-	auto viewSpace = m_stateMgr->GetContext()->m_wind->GetViewSpace();
+	auto viewSpace = m_stateMgr->GetContext()->wind->GetViewSpace();
 	std::cout << "viewSpace: " << viewSpace.left << ", " << viewSpace.top
 		<< ", " << viewSpace.width << ", " << viewSpace.height << std::endl;
 
@@ -88,7 +88,7 @@ void State_Game::OnCreate(){
 }
 
 void State_Game::OnDestroy(){
-	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
+	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
 	evMgr->RemoveCallback(StateType::Game, "Key_Escape");
 	evMgr->RemoveCallback(StateType::Game, "Key_O");
 	evMgr->RemoveCallback(StateType::Game, "Key_Comma");
@@ -120,7 +120,7 @@ void State_Game::UpdateCamera(){
 	m_view.setCenter(pos->GetPosition());
 
 	SharedContext* context = m_stateMgr->GetContext();
-	context->m_wind->GetRenderWindow()->setView(m_view);
+	context->wind->GetRenderWindow()->setView(m_view);
 
 	/*
 	sf::FloatRect viewSpace = context->m_wind->GetViewSpace();
@@ -183,7 +183,7 @@ void State_Game::Draw(){
 
 		if (renderer)
 		{
-			renderer->Render(m_stateMgr->GetContext()->m_wind, i);
+			renderer->Render(m_stateMgr->GetContext()->wind, i);
 		}
 	}
 }
@@ -229,7 +229,7 @@ void State_Game::Activate(){}
 void State_Game::Deactivate(){}
 
 void State_Game::ToggleOverlay(EventDetails* l_details){
-	m_stateMgr->GetContext()->m_debugOverlay.SetDebug(!m_stateMgr->GetContext()->m_debugOverlay.Debug());
+	m_stateMgr->GetContext()->debugOverlay.SetDebug(!m_stateMgr->GetContext()->debugOverlay.Debug());
 }
 
 entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle)

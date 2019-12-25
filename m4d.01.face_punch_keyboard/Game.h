@@ -1,7 +1,10 @@
 #pragma once
+
 #include <iostream>
+
 #include <SFML/Audio.hpp>
 #include <entityx/entityx.h>
+
 #include "Window.h"
 #include "EventManager.h"
 #include "StateManager.h"

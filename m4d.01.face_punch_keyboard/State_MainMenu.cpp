@@ -51,13 +51,13 @@ void State_MainMenu::OnCreate(){
 	}
 
 	EventManager* evMgr = m_stateMgr->
-		GetContext()->m_eventManager;
+		GetContext()->eventManager;
 	evMgr->AddCallback(StateType::MainMenu, "Mouse_Left",&State_MainMenu::MouseClick,this);
 }
 
 void State_MainMenu::OnDestroy(){
 	EventManager* evMgr = m_stateMgr->
-		GetContext()->m_eventManager;
+		GetContext()->eventManager;
 	evMgr->RemoveCallback(StateType::MainMenu, "Mouse_Left");
 }
 
@@ -92,7 +92,7 @@ void State_MainMenu::MouseClick(EventDetails* l_details){
 			} else if(i == 1){
 				// Credits state.
 			} else if(i == 2){
-				m_stateMgr->GetContext()->m_wind->Close();
+				m_stateMgr->GetContext()->wind->Close();
 			}
 		}
 	}
@@ -100,7 +100,7 @@ void State_MainMenu::MouseClick(EventDetails* l_details){
 
 void State_MainMenu::Draw(){
 	sf::RenderWindow* window = m_stateMgr->
-		GetContext()->m_wind->GetRenderWindow();
+		GetContext()->wind->GetRenderWindow();
 	window->draw(m_text);
 	for(int i = 0; i < 3; ++i){
 		window->draw(m_rects[i]);
