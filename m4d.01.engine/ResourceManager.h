@@ -4,6 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <Meta.h>
+#include <json.hpp>
+#include "json/JsonCast.h"
 #include "Utilities.h"
 
 template<typename Derived, typename T>
@@ -80,15 +83,10 @@ private:
 		std::ifstream paths;
 		paths.open(Utils::GetWorkingDirectory() + l_pathFile);
 		if(paths.is_open()){
-			std::string line;
-			while(std::getline(paths,line)){
-				std::stringstream keystream(line);
-				std::string pathName;
-				std::string path;
-				keystream >> pathName;
-				keystream >> path;
-				m_paths.emplace(pathName,path);
-			}
+			nlohmann::json pathsJson;
+			paths >> pathsJson;
+			from_json(pathsJson, m_paths);
+			
 			paths.close();
 			return;
 		}

@@ -16,6 +16,9 @@
     <Filter Include="entityx">
       <UniqueIdentifier>{68c9f6ef-4472-4e0d-8df0-4aed16fc3f83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{af5cf48d-9840-4e04-a761-77606f727642}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -105,6 +108,12 @@
     <ClInclude Include="entityx\tags\TagsComponent.h">
       <Filter>entityx</Filter>
     </ClInclude>
+    <ClInclude Include="json\StringCast.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\JsonCast.h">
+      <Filter>json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpriteSheet.cpp">
@@ -143,5 +152,13 @@
     <ClCompile Include="entityx\System.cc">
       <Filter>entityx</Filter>
     </ClCompile>
+    <ClCompile Include="json\StringCast.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="json\JsonCast.inl">
+      <Filter>json</Filter>
+    </None>
   </ItemGroup>
 </Project>
