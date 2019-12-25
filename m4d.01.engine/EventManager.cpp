@@ -1,4 +1,8 @@
 #include "EventManager.h"
+#include <json.hpp>
+#include "json/JsonCast.h"
+
+using KeyBindings = std::unordered_map<std::string, std::vector<std::string>>;
 
 EventManager::EventManager()
 	:m_currentState(StateType(0)), m_hasFocus(true)
@@ -132,34 +136,45 @@ void EventManager::Update(){
 }
 
 void EventManager::LoadBindings(){
-	std::string delimiter = ":";
-
 	std::ifstream bindings;
 	bindings.open(Utils::GetWorkingDirectory() + "keys.cfg");
 	if (!bindings.is_open()){ std::cout << "! Failed loading keys.cfg." << std::endl; return; }
-	std::string line;
-	while (std::getline(bindings, line)){
-		std::stringstream keystream(line);
-		std::string callbackName;
-		keystream >> callbackName;
+
+	nlohmann::json json;
+	bindings >> json;
+
+	KeyBindings keyBindings;
+	from_json(json, keyBindings);
+
+	const std::string delimiter = ":";
+
+	for (auto keyBinding : keyBindings)
+	{
+		const std::string callbackName = keyBinding.first;
 		Binding* bind = new Binding(callbackName);
-		while (!keystream.eof()){
-			std::string keyval;
-			keystream >> keyval;
+
+		for (auto keyval : keyBinding.second)
+		{
 			int start = 0;
 			int end = keyval.find(delimiter);
-			if (end == std::string::npos){ delete bind; bind = nullptr; break; }
+			if (end == std::string::npos) 
+			{
+				delete bind;
+				bind = nullptr;
+				break;
+			}
+
 			EventType type = EventType(stoi(keyval.substr(start, end - start)));
 			int code = stoi(keyval.substr(end + delimiter.length(),
 				keyval.find(delimiter, end + delimiter.length())));
-
 			EventInfo eventInfo;
 			eventInfo.m_code = code;
 			bind->BindEvent(type, eventInfo);
 		}
 
-		if (!AddBinding(bind)){ delete bind; }
+		if (!AddBinding(bind)) { delete bind; }
 		bind = nullptr;
 	}
+
 	bindings.close();
 }
