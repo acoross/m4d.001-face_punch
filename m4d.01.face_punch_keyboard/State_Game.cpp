@@ -15,7 +15,9 @@
 #include "Systems/SubMovementSystem.h"
 #include "Systems/PunchSystem.h"
 
-entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle);
+entityx::Entity CreateCharacter(
+	sf::Texture* bodyT, sf::Texture* lhandT, sf::Texture* rhandT, 
+	entityx::EntityManager& entities, sf::Vector2f position, float angle);
 
 State_Game::State_Game(StateManager* l_stateManager)
 	: BaseState(l_stateManager), m_gameContext{0,}
@@ -27,7 +29,7 @@ void State_Game::OnCreate(){
 	sf::Vector2u size = m_stateMgr->GetContext()->wind->GetWindowSize();
 	m_view.setSize(size.x, size.y);
 	m_view.setCenter(size.x / 2, size.y / 2);
-	m_view.zoom(0.6f);
+	m_view.zoom(0.5f);
 	m_stateMgr->GetContext()->wind->GetRenderWindow()->setView(m_view);
 	
 	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
@@ -57,8 +59,16 @@ void State_Game::OnCreate(){
 	std::cout << "viewSpace: " << viewSpace.left << ", " << viewSpace.top
 		<< ", " << viewSpace.width << ", " << viewSpace.height << std::endl;
 
+	m_stateMgr->GetContext()->textureManager->RequireResource("CatBody");
+	auto* bodyTexture = m_stateMgr->GetContext()->textureManager->GetResource("CatBody");
+	m_stateMgr->GetContext()->textureManager->RequireResource("CatRightHand");
+	auto* rhandTexture = m_stateMgr->GetContext()->textureManager->GetResource("CatRightHand");
+	m_stateMgr->GetContext()->textureManager->RequireResource("CatLeftHand");
+	auto* lhandTexture = m_stateMgr->GetContext()->textureManager->GetResource("CatLeftHand");
+
 	{
 		m_player = CreateCharacter(
+			bodyTexture, lhandTexture, rhandTexture,
 			m_entityX.entities, 
 			sf::Vector2f(viewSpace.left + viewSpace.width / 2, viewSpace.top + viewSpace.height / 2),
 			0);
@@ -73,18 +83,12 @@ void State_Game::OnCreate(){
 			float x = xdist(gen), y = ydist(gen), angle = radDist(gen);
 			
 			auto npc = CreateCharacter(
+				bodyTexture, lhandTexture, rhandTexture,
 				m_entityX.entities,
 				sf::Vector2f(x, y),
 				angle);
 		}
 	}
-
-	//m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
-	//m_gameMap->LoadMap("media/Maps/map1.map");
-
-	/*m_stateMgr->GetContext()->m_systemManager->system<S_Collision>()->SetMap(m_gameMap);
-	m_stateMgr->GetContext()->m_systemManager->system<S_Movement>()->SetMap(m_gameMap);*/
-	/*m_player = m_gameMap->GetPlayer();*/
 }
 
 void State_Game::OnDestroy(){
@@ -99,6 +103,10 @@ void State_Game::OnDestroy(){
 	evMgr->RemoveCallback(StateType::Game, "Player_MoveDown");
 
 	m_entityX.entities.reset();
+
+	m_stateMgr->GetContext()->textureManager->ReleaseResource("CatBody");
+	m_stateMgr->GetContext()->textureManager->ReleaseResource("CatRightHand");
+	m_stateMgr->GetContext()->textureManager->ReleaseResource("CatLeftHand");
 }
 
 void State_Game::Update(const sf::Time& l_time){
@@ -232,7 +240,9 @@ void State_Game::ToggleOverlay(EventDetails* l_details){
 	m_stateMgr->GetContext()->debugOverlay.SetDebug(!m_stateMgr->GetContext()->debugOverlay.Debug());
 }
 
-entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f position, float angle)
+entityx::Entity CreateCharacter(
+	sf::Texture* bodyT, sf::Texture* lhandT, sf::Texture* rhandT,
+	entityx::EntityManager& entities, sf::Vector2f position, float angle)
 {
 	auto character = entities.create();
 	auto positionComp = character.assign<C_Position>();
@@ -242,7 +252,7 @@ entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f p
 
 	auto drawable = character.assign<C_Drawable>();
 	drawable->SetSize(10);
-	drawable->SetColor(sf::Color::White);
+	drawable->SetTexture(*bodyT);
 
 	auto velocity = character.assign<Velocity>();
 	velocity->angle = angle;
@@ -257,7 +267,7 @@ entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f p
 		auto rightHand = entities.create();
 		auto rDrawable = rightHand.assign<C_Drawable>();
 		rDrawable->SetSize(5);
-		rDrawable->SetColor(sf::Color::White);
+		rDrawable->SetTexture(*rhandT);
 
 		auto rPos = rightHand.assign<C_Position>();
 		rPos->SetElevation(0);
@@ -274,7 +284,7 @@ entityx::Entity CreateCharacter(entityx::EntityManager& entities, sf::Vector2f p
 		auto leftHand = entities.create();
 		auto lDrawable = leftHand.assign<C_Drawable>();
 		lDrawable->SetSize(5);
-		lDrawable->SetColor(sf::Color::White);
+		lDrawable->SetTexture(*lhandT);
 
 		auto lPos = leftHand.assign<C_Position>();
 		lPos->SetElevation(0);

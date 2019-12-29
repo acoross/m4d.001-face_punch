@@ -1,58 +1,67 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "C_Base.h"
 
-class C_Drawable : public C_Base{
+class C_Drawable
+{
 public:
-	C_Drawable() : C_Base()
+	C_Drawable()
 	{
 		float radius = 1;
 		SetSize(radius);
 	}
 
-	virtual ~C_Drawable(){}
-
-	virtual void ReadIn(std::stringstream& l_stream) override
-	{
-		float radius;
-		l_stream >> radius;
-		circle.setRadius(radius);
-	}
+	~C_Drawable(){}
 
 	void SetSize(float radius)
 	{
-		circle.setRadius(radius);
-		circle.setOrigin(radius, radius);
+		radius_ = radius;
+
+		if (auto texture = sprite.getTexture())
+		{
+			const auto size = texture->getSize();
+
+			const auto scale = sf::Vector2f(2 * radius / size.x, 2 * radius / size.y);
+			sprite.setScale(scale);
+		}
 	}
 
-	void SetColor(const sf::Color color)
+	void SetRotation(const float angle)
 	{
-		circle.setFillColor(color);
-		circle.setOutlineColor(color);
+		sprite.setRotation(angle);
+	}
+
+	void SetTexture(const sf::Texture& texture)
+	{
+		sprite.setTexture(texture);
+		const auto size = texture.getSize();
+		sprite.setOrigin(size.x / 2.f, size.y / 2.f);
+
+		SetSize(radius_);
 	}
 
 	/// angle: degree
 	void UpdatePosition(const sf::Vector2f& l_vec)
 	{
-		circle.setPosition(l_vec);
+		sprite.setPosition(l_vec);
 	}
 
 	float GetRadius() const
 	{
-		return circle.getRadius();
+		return radius_;
 	}
 
 	const sf::FloatRect GetGlobalBound() const
 	{
-		return circle.getGlobalBounds();
+		return sprite.getGlobalBounds();
 	}
 
 	void Draw(sf::RenderWindow* l_wind)
 	{
-		l_wind->draw(circle);
+		l_wind->draw(sprite);
 	}
 
 private:
-	sf::CircleShape circle;
+	float radius_;
+	sf::Sprite sprite;
 };

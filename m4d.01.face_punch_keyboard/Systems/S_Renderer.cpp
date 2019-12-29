@@ -12,6 +12,7 @@ void S_Renderer::update(entityx::EntityManager& entities, entityx::EventManager&
 {
 	entities.each<C_Position, C_Drawable>([](auto entity, C_Position& position, C_Drawable& drawable)
 		{
+			drawable.SetRotation(position.GetAngle() - 90);
 			drawable.UpdatePosition(position.GetPosition());
 		});
 }
