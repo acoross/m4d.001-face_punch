@@ -29,7 +29,7 @@ void State_Game::OnCreate(){
 	sf::Vector2u size = m_stateMgr->GetContext()->wind->GetWindowSize();
 	m_view.setSize(size.x, size.y);
 	m_view.setCenter(size.x / 2, size.y / 2);
-	m_view.zoom(0.5f);
+	//m_view.zoom(0.5f);
 	m_stateMgr->GetContext()->wind->GetRenderWindow()->setView(m_view);
 	
 	EventManager* evMgr = m_stateMgr->GetContext()->eventManager;
@@ -244,6 +244,10 @@ entityx::Entity CreateCharacter(
 	sf::Texture* bodyT, sf::Texture* lhandT, sf::Texture* rhandT,
 	entityx::EntityManager& entities, sf::Vector2f position, float angle)
 {
+	const float bodyRadius = 20.f;
+	const float handRadius = bodyRadius / 2;
+	const float handDist = bodyRadius + handRadius;
+
 	auto character = entities.create();
 	auto positionComp = character.assign<C_Position>();
 	positionComp->SetElevation(0);
@@ -251,22 +255,21 @@ entityx::Entity CreateCharacter(
 	positionComp->SetAngle(angle);
 
 	auto drawable = character.assign<C_Drawable>();
-	drawable->SetSize(10);
+	drawable->SetSize(bodyRadius);
 	drawable->SetTexture(*bodyT);
 
 	auto velocity = character.assign<Velocity>();
 	velocity->angle = angle;
 
 	auto body = character.assign<Body>();
-	body->radius = 10;
+	body->radius = bodyRadius;
 	body->health = 200;
-
-	const float handDist = 15.f;
+	
 
 	{
 		auto rightHand = entities.create();
 		auto rDrawable = rightHand.assign<C_Drawable>();
-		rDrawable->SetSize(5);
+		rDrawable->SetSize(handRadius);
 		rDrawable->SetTexture(*rhandT);
 
 		auto rPos = rightHand.assign<C_Position>();
@@ -283,7 +286,7 @@ entityx::Entity CreateCharacter(
 	{
 		auto leftHand = entities.create();
 		auto lDrawable = leftHand.assign<C_Drawable>();
-		lDrawable->SetSize(5);
+		lDrawable->SetSize(handRadius);
 		lDrawable->SetTexture(*lhandT);
 
 		auto lPos = leftHand.assign<C_Position>();
