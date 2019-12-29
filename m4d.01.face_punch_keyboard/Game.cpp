@@ -27,7 +27,7 @@ Game::Game(): m_window("Chapter 8", sf::Vector2u(800,600)),
 	m_music.openFromFile(::Utils::GetWorkingDirectory() + "media/Music/the_cheetahmen.ogg");
 	m_context.music = &m_music;
 
-	m_stateManager.SwitchTo(StateType::Game);
+	m_stateManager.SwitchTo(StateType::Logo);
 }
 
 Game::~Game(){}

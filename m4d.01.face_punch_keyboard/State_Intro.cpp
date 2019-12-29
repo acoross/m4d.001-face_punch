@@ -14,11 +14,21 @@ void State_Intro::OnCreate(){
 
 	TextureManager* textureMgr = m_stateMgr->GetContext()->textureManager;
 	textureMgr->RequireResource("Intro");
-	m_introSprite.setTexture(*textureMgr->GetResource("Intro"));
-	m_introSprite.setOrigin(textureMgr->GetResource("Intro")->getSize().x / 2.0f,
-							textureMgr->GetResource("Intro")->getSize().y / 2.0f);
 
+	const auto* introTexture = textureMgr->GetResource("Intro");
+	const auto textureSize = introTexture->getSize();
+	m_introSprite.setTexture(*introTexture);
+	m_introSprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
 	m_introSprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+	if (windowSize.x < textureSize.x || windowSize.y < textureSize.y)
+	{
+		float ratioX = textureSize.x / windowSize.x;
+		float ratioY = textureSize.y / windowSize.y;
+		float ratio = ratioX > ratioY ? ratioX : ratioY;
+
+		m_introSprite.setScale(1 / ratio, 1 / ratio);
+	}
 
 	m_text.setString(sf::String("Press SPACE to continue"));
 	m_text.setCharacterSize(15);
@@ -26,7 +36,7 @@ void State_Intro::OnCreate(){
 	m_text.setOrigin(textRect.left + textRect.width / 2.0f,
 		textRect.top + textRect.height / 2.0f);
 	m_text.setPosition(m_introSprite.getPosition().x, 
-		m_introSprite.getPosition().y + textureMgr->GetResource("Intro")->getSize().y / 1.5f);
+		m_introSprite.getPosition().y + textureSize.y / 1.5f);
 
 	EventManager* evMgr = m_stateMgr->
 		GetContext()->eventManager;
