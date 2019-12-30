@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseState.h"
 #include "EventManager.h"
+#include "SpriteSheet.h"
 
 class State_Intro : public BaseState{
 public:
@@ -18,6 +19,7 @@ public:
 
 	void Continue(EventDetails* l_details);
 private:
-	sf::Sprite m_introSprite;
+	//sf::Sprite m_introSprite;
 	sf::Text m_text;
+	SpriteSheet m_spriteSheet;
 };

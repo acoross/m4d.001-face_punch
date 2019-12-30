@@ -1,0 +1,8 @@
+Texture Intro
+Size 640 360
+Scale 1 1
+Padding 0 0
+Spacing 0 0
+|Type|Name|StartFrame|EndFrame|Row|FrameTime|FrameActionStart|FrameActionEnd|
+AnimationType Simple
+Animation Idle 0 12 0 0.1 -1 -1

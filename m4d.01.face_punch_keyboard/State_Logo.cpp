@@ -12,6 +12,9 @@ void State_Logo::OnCreate() {
 	sf::Vector2u windowSize = m_stateMgr->GetContext()->wind->GetRenderWindow()->getSize();
 
 	TextureManager* textureMgr = m_stateMgr->GetContext()->textureManager;
+
+	//m_logoTextures
+
 	textureMgr->RequireResource("Logo");
 
 	m_logoSprite.setTexture(*textureMgr->GetResource("Logo"));

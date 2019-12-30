@@ -2,7 +2,8 @@
 #include "StateManager.h"
 
 State_Intro::State_Intro(StateManager* l_stateManager)
-	: BaseState(l_stateManager){}
+	: BaseState(l_stateManager), m_spriteSheet(l_stateManager->GetContext()->textureManager)
+{}
 
 State_Intro::~State_Intro(){}
 
@@ -15,28 +16,20 @@ void State_Intro::OnCreate(){
 	TextureManager* textureMgr = m_stateMgr->GetContext()->textureManager;
 	textureMgr->RequireResource("Intro");
 
-	const auto* introTexture = textureMgr->GetResource("Intro");
-	const auto textureSize = introTexture->getSize();
-	m_introSprite.setTexture(*introTexture);
-	m_introSprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
-	m_introSprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+	const auto spritePosition = sf::Vector2f(windowSize.x / 2.0f, windowSize.y / 2.0f);
 
-	if (windowSize.x < textureSize.x || windowSize.y < textureSize.y)
-	{
-		float ratioX = textureSize.x / windowSize.x;
-		float ratioY = textureSize.y / windowSize.y;
-		float ratio = ratioX > ratioY ? ratioX : ratioY;
+	m_spriteSheet.LoadSheet("media/SpriteSheets/Intro.sheet");
+	m_spriteSheet.SetSpritePosition(spritePosition);
+	m_spriteSheet.GetCurrentAnim()->SetLooping(true);
 
-		m_introSprite.setScale(1 / ratio, 1 / ratio);
-	}
+	const auto spriteSize = m_spriteSheet.GetSpriteSize();
 
 	m_text.setString(sf::String("Press SPACE to continue"));
 	m_text.setCharacterSize(15);
 	sf::FloatRect textRect = m_text.getLocalBounds();
 	m_text.setOrigin(textRect.left + textRect.width / 2.0f,
 		textRect.top + textRect.height / 2.0f);
-	m_text.setPosition(m_introSprite.getPosition().x, 
-		m_introSprite.getPosition().y + textureSize.y / 1.5f);
+	m_text.setPosition(spritePosition.x, spritePosition.y + spriteSize.y / 1.5f);
 
 	EventManager* evMgr = m_stateMgr->
 		GetContext()->eventManager;
@@ -57,7 +50,7 @@ void State_Intro::Draw(){
 	sf::RenderWindow* window = m_stateMgr->
 		GetContext()->wind->GetRenderWindow();
 
-	window->draw(m_introSprite);
+	m_spriteSheet.Draw(window);
 	window->draw(m_text);
 }
 
@@ -66,6 +59,9 @@ void State_Intro::Continue(EventDetails* l_details){
 	m_stateMgr->Remove(StateType::Intro);
 }
 
-void State_Intro::Update(const sf::Time& l_time){}
+void State_Intro::Update(const sf::Time& l_time)
+{
+	m_spriteSheet.Update(l_time.asSeconds());
+}
 void State_Intro::Activate(){}
 void State_Intro::Deactivate(){}

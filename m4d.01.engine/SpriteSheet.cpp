@@ -27,7 +27,7 @@ Anim_Base* SpriteSheet::GetCurrentAnim(){
 
 void SpriteSheet::SetSpriteSize(const sf::Vector2u& l_size){
 	m_spriteSize = l_size;
-	m_sprite.setOrigin(m_spriteSize.x / 2, m_spriteSize.y);
+	m_sprite.setOrigin(m_spriteSize.x / 2, m_spriteSize.y / 2);
 }
 
 void SpriteSheet::SetSpritePosition(const sf::Vector2f& l_pos){
@@ -112,6 +112,8 @@ bool SpriteSheet::LoadSheet(const std::string& l_file){
 			Anim_Base* anim = nullptr;
 			if (m_animType == "Directional"){
 				anim = new Anim_Directional();
+			} else if (m_animType == "Simple") {
+				anim = new Anim_Simple();
 			} else {
 				std::cerr << "! Unknown animation type: " << m_animType << std::endl;
 				continue;

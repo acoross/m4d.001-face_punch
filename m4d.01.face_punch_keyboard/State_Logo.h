@@ -1,4 +1,7 @@
 #pragma once
+
+#include <vector>
+
 #include "BaseState.h"
 #include "EventManager.h"
 
@@ -18,6 +21,7 @@ public:
 
 	void Continue(EventDetails* l_details);
 private:
+	std::vector<sf::Texture*> m_logoTextures;
 	sf::Sprite m_logoSprite;
 	sf::Font m_font;
 	sf::Text m_text;
